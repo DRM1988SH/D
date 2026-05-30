@@ -89,6 +89,15 @@
             font-size: 1.4rem;
             color: var(--a);
         }
+        .nav-logo {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+            border-radius: 6px;
+            background: white;
+            padding: 2px;
+            border: 1px solid var(--bdr);
+        }
         .nav-toggle {
             display: none;
             background: none;
@@ -454,6 +463,15 @@
             font-size: .8rem;
             margin: .2rem 0;
         }
+        .footer-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 0.5rem;
+            background: white;
+            border-radius: 8px;
+            padding: 4px;
+        }
         .toast-container {
             position: fixed;
             bottom: 1rem;
@@ -497,6 +515,29 @@
             color: var(--t2);
             grid-column: 1/-1;
         }
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .section-title h2 {
+            margin-bottom: 0;
+            text-align: left;
+        }
+        .rtl .section-title h2 {
+            text-align: right;
+        }
+        .view-all {
+            font-size: .8rem;
+            color: var(--p);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .view-all:hover {
+            text-decoration: underline;
+        }
         @media(max-width:768px) {
             .nav-toggle {
                 display: block;
@@ -539,7 +580,11 @@
 
     <nav class="navbar">
         <div class="nav-inner">
-            <a href="#home" class="nav-brand"><i class="fas fa-globe-europe"></i> <span data-i18n="brand">Nouvel horizon d'emploi</span></a>
+            <a href="#home" class="nav-brand">
+                <img id="navLogo" class="nav-logo hidden" src="" alt="Logo" style="display:none;">
+                <i id="navIcon" class="fas fa-globe-europe"></i>
+                <span data-i18n="brand">Nouvel horizon d'emploi</span>
+            </a>
             <button class="nav-toggle" id="navToggle"><i class="fas fa-bars"></i></button>
             <div class="nav-menu" id="navMenu">
                 <ul class="nav-links">
@@ -586,6 +631,20 @@
                     <div class="card"><i class="fas fa-balance-scale"></i><h3 data-i18n="home.f3t">Droits</h3><p data-i18n="home.f3d">CESEDA, CEAS</p></div>
                     <div class="card"><i class="fas fa-video"></i><h3 data-i18n="home.f4t">Ressources</h3><p data-i18n="home.f4d">Vidéos, affiches</p></div>
                 </div>
+
+                <!-- Latest Videos Section on Home -->
+                <div class="section-title" style="margin-top:2rem;">
+                    <h2>🎬 Dernières vidéos et médias</h2>
+                    <a href="#videos" class="view-all" onclick="showSection('videos')">Voir tout →</a>
+                </div>
+                <div class="grid-3" id="homeVideosList"><p class="loading">Chargement...</p></div>
+
+                <!-- Latest Posters Section on Home -->
+                <div class="section-title" style="margin-top:1.5rem;">
+                    <h2>🖼️ Dernières affiches</h2>
+                    <a href="#posters" class="view-all" onclick="showSection('posters')">Voir tout →</a>
+                </div>
+                <div class="grid-3" id="homePostersList"><p class="loading">Chargement...</p></div>
             </div>
         </section>
 
@@ -694,6 +753,7 @@
                     <button class="admin-tab" data-tab="jobs-manage">💼 <span data-i18n="admin.jobs">Offres</span></button>
                     <button class="admin-tab" data-tab="videos-manage">🎬 <span data-i18n="admin.videos">Vidéos</span></button>
                     <button class="admin-tab" data-tab="posters-manage">🖼️ <span data-i18n="admin.posters">Affiches</span></button>
+                    <button class="admin-tab" data-tab="settings">⚙️ <span>Paramètres</span></button>
                     <button class="admin-tab" data-tab="admins">🛡️ <span data-i18n="admin.admins">Admins</span></button>
                 </div>
                 <div class="admin-content" id="adminContent"></div>
@@ -703,7 +763,12 @@
 
     <footer class="footer">
         <div class="footer-grid">
-            <div><h4>Nouvel horizon d'emploi</h4><p>📍 Paris, France</p><p>📞 +33 1 23 45 67 89</p></div>
+            <div>
+                <img id="footerLogo" class="footer-logo" src="" alt="Logo" style="display:none;">
+                <h4>Nouvel horizon d'emploi</h4>
+                <p>📍 Lille, France</p>
+                <p>📞 0033 7 58 17 22 11</p>
+            </div>
             <div><h4 data-i18n="ft.links">Liens</h4><a href="#jobs"><span data-i18n="ft.jobs">Emplois</span></a><a href="#training"><span data-i18n="ft.training">Formations</span></a></div>
             <div><h4 data-i18n="ft.legal">Légal</h4><a href="#"><span data-i18n="ft.mentions">Mentions</span></a><a href="#"><span data-i18n="ft.rgpd">RGPD</span></a></div>
         </div>
@@ -733,7 +798,7 @@
                     legal: { title: "Cadre Juridique", fr: "Loi Immigration France", eu: "Politique Européenne", un: "Convention de Genève", consult: "Consulter →" },
                     admin: { title: "Administration", dashboard: "Tableau de bord", users: "Utilisateurs", jobs: "Offres", videos: "Vidéos", posters: "Affiches", admins: "Administrateurs" },
                     ft: { links: "Liens rapides", jobs: "Emplois", training: "Formations", legal: "Légal", mentions: "Mentions légales", rgpd: "RGPD", rgpd2: "Conforme RGPD" },
-                    toast: { regOk: "✅ Compte créé avec succès !", profOk: "✅ Profil enregistré !", loginOk: "✅ Connecté avec succès !", loginErr: "❌ Email ou mot de passe incorrect", logoutOk: "👋 Déconnecté", applyOk: "✅ Candidature envoyée pour : ", jobAdd: "✅ Offre ajoutée", jobDel: "🗑️ Offre supprimée", vidAdd: "✅ Vidéo ajoutée", vidDel: "🗑️ Vidéo supprimée", postAdd: "✅ Affiche ajoutée", postDel: "🗑️ Affiche supprimée", adminAdd: "✅ Administrateur ajouté", adminRem: "🗑️ Administrateur supprimé", userDel: "🗑️ Utilisateur supprimé", lang: "🌐 Langue : Français", loginReq: "⚠️ Veuillez vous connecter", profReq: "⚠️ Complétez votre profil", passMatch: "❌ Les mots de passe ne correspondent pas", emailUsed: "❌ Cet email est déjà utilisé", adminOnly: "⚠️ Accès réservé aux administrateurs", volunteerOk: "✅ Inscription bénévole : ", fileLarge: "❌ Fichier trop volumineux (max 4MB)", fileType: "❌ Type de fichier non supporté" }
+                    toast: { regOk: "✅ Compte créé avec succès !", profOk: "✅ Profil enregistré !", loginOk: "✅ Connecté avec succès !", loginErr: "❌ Email ou mot de passe incorrect", logoutOk: "👋 Déconnecté", applyOk: "✅ Candidature envoyée pour : ", jobAdd: "✅ Offre ajoutée", jobDel: "🗑️ Offre supprimée", vidAdd: "✅ Vidéo ajoutée", vidDel: "🗑️ Vidéo supprimée", postAdd: "✅ Affiche ajoutée", postDel: "🗑️ Affiche supprimée", adminAdd: "✅ Administrateur ajouté", adminRem: "🗑️ Administrateur supprimé", userDel: "🗑️ Utilisateur supprimé", lang: "🌐 Langue : Français", loginReq: "⚠️ Veuillez vous connecter", profReq: "⚠️ Complétez votre profil", passMatch: "❌ Les mots de passe ne correspondent pas", emailUsed: "❌ Cet email est déjà utilisé", adminOnly: "⚠️ Accès réservé aux administrateurs", volunteerOk: "✅ Inscription bénévole : ", fileLarge: "❌ Fichier trop volumineux (max 20MB)", fileType: "❌ Type de fichier non supporté", logoUpdated: "✅ Logo mis à jour !" }
                 },
                 en: {
                     disc: "⚠️ Nous ne soutenons pas l'immigration illégale - We do not support illegal immigration - نحن لا ندعم الهجرة غير الشرعية",
@@ -751,7 +816,7 @@
                     legal: { title: "Legal Framework", fr: "French Immigration Law", eu: "European Policy", un: "Geneva Convention", consult: "Consult →" },
                     admin: { title: "Administration", dashboard: "Dashboard", users: "Users", jobs: "Jobs", videos: "Videos", posters: "Posters", admins: "Administrators" },
                     ft: { links: "Quick links", jobs: "Jobs", training: "Training", legal: "Legal", mentions: "Legal notices", rgpd: "GDPR", rgpd2: "GDPR Compliant" },
-                    toast: { regOk: "✅ Account created!", profOk: "✅ Profile saved!", loginOk: "✅ Logged in!", loginErr: "❌ Wrong email or password", logoutOk: "👋 Logged out", applyOk: "✅ Applied for: ", jobAdd: "✅ Job added", jobDel: "🗑️ Job deleted", vidAdd: "✅ Video added", vidDel: "🗑️ Video deleted", postAdd: "✅ Poster added", postDel: "🗑️ Poster deleted", adminAdd: "✅ Admin added", adminRem: "🗑️ Admin removed", userDel: "🗑️ User deleted", lang: "🌐 Language: English", loginReq: "⚠️ Please login", profReq: "⚠️ Complete your profile", passMatch: "❌ Passwords don't match", emailUsed: "❌ Email already used", adminOnly: "⚠️ Admin access only", volunteerOk: "✅ Volunteer: ", fileLarge: "❌ File too large (max 4MB)", fileType: "❌ Unsupported file type" }
+                    toast: { regOk: "✅ Account created!", profOk: "✅ Profile saved!", loginOk: "✅ Logged in!", loginErr: "❌ Wrong email or password", logoutOk: "👋 Logged out", applyOk: "✅ Applied for: ", jobAdd: "✅ Job added", jobDel: "🗑️ Job deleted", vidAdd: "✅ Video added", vidDel: "🗑️ Video deleted", postAdd: "✅ Poster added", postDel: "🗑️ Poster deleted", adminAdd: "✅ Admin added", adminRem: "🗑️ Admin removed", userDel: "🗑️ User deleted", lang: "🌐 Language: English", loginReq: "⚠️ Please login", profReq: "⚠️ Complete your profile", passMatch: "❌ Passwords don't match", emailUsed: "❌ Email already used", adminOnly: "⚠️ Admin access only", volunteerOk: "✅ Volunteer: ", fileLarge: "❌ File too large (max 20MB)", fileType: "❌ Unsupported file type", logoUpdated: "✅ Logo updated!" }
                 },
                 ar: {
                     disc: "⚠️ Nous ne soutenons pas l'immigration illégale - We do not support illegal immigration - نحن لا ندعم الهجرة غير الشرعية",
@@ -769,7 +834,7 @@
                     legal: { title: "الإطار القانوني", fr: "قانون الهجرة الفرنسي", eu: "السياسة الأوروبية", un: "اتفاقية جنيف", consult: "استشارة ←" },
                     admin: { title: "الإدارة", dashboard: "لوحة القيادة", users: "المستخدمين", jobs: "الوظائف", videos: "الفيديوهات", posters: "الملصقات", admins: "المدراء" },
                     ft: { links: "روابط سريعة", jobs: "الوظائف", training: "التدريبات", legal: "قانوني", mentions: "إشعارات قانونية", rgpd: "اللائحة العامة لحماية البيانات", rgpd2: "متوافقة مع RGPD" },
-                    toast: { regOk: "✅ تم إنشاء الحساب بنجاح!", profOk: "✅ تم حفظ الملف الشخصي!", loginOk: "✅ تم تسجيل الدخول!", loginErr: "❌ بريد إلكتروني أو كلمة مرور خاطئة", logoutOk: "👋 تم تسجيل الخروج", applyOk: "✅ تم التقديم على: ", jobAdd: "✅ تمت إضافة الوظيفة", jobDel: "🗑️ تم حذف الوظيفة", vidAdd: "✅ تمت إضافة الفيديو", vidDel: "🗑️ تم حذف الفيديو", postAdd: "✅ تمت إضافة الملصق", postDel: "🗑️ تم حذف الملصق", adminAdd: "✅ تمت إضافة المدير", adminRem: "🗑️ تم حذف المدير", userDel: "🗑️ تم حذف المستخدم", lang: "🌐 اللغة: العربية", loginReq: "⚠️ يرجى تسجيل الدخول", profReq: "⚠️ أكمل ملفك الشخصي", passMatch: "❌ كلمتا المرور غير متطابقتين", emailUsed: "❌ البريد الإلكتروني مستخدم بالفعل", adminOnly: "⚠️ يقتصر الوصول على المدراء", volunteerOk: "✅ تطوع: ", fileLarge: "❌ الملف كبير جداً (الحد 4MB)", fileType: "❌ نوع الملف غير مدعوم" }
+                    toast: { regOk: "✅ تم إنشاء الحساب بنجاح!", profOk: "✅ تم حفظ الملف الشخصي!", loginOk: "✅ تم تسجيل الدخول!", loginErr: "❌ بريد إلكتروني أو كلمة مرور خاطئة", logoutOk: "👋 تم تسجيل الخروج", applyOk: "✅ تم التقديم على: ", jobAdd: "✅ تمت إضافة الوظيفة", jobDel: "🗑️ تم حذف الوظيفة", vidAdd: "✅ تمت إضافة الفيديو", vidDel: "🗑️ تم حذف الفيديو", postAdd: "✅ تمت إضافة الملصق", postDel: "🗑️ تم حذف الملصق", adminAdd: "✅ تمت إضافة المدير", adminRem: "🗑️ تم حذف المدير", userDel: "🗑️ تم حذف المستخدم", lang: "🌐 اللغة: العربية", loginReq: "⚠️ يرجى تسجيل الدخول", profReq: "⚠️ أكمل ملفك الشخصي", passMatch: "❌ كلمتا المرور غير متطابقتين", emailUsed: "❌ البريد الإلكتروني مستخدم بالفعل", adminOnly: "⚠️ يقتصر الوصول على المدراء", volunteerOk: "✅ تطوع: ", fileLarge: "❌ الملف كبير جداً (الحد 20MB)", fileType: "❌ نوع الملف غير مدعوم", logoUpdated: "✅ تم تحديث الشعار!" }
                 }
             },
             t(key) { var keys = key.split('.'); var val = this.data[this.lang]; for (var i = 0; i < keys.length; i++) { if (val && val[keys[i]] !== undefined) val = val[keys[i]]; else return key; } return val; },
@@ -794,12 +859,13 @@
             currentUser() { return this.get('cu'); },
             saveCurrentUser(u) { this.set('cu', u); },
             logout() { localStorage.removeItem('nhe_cu'); },
+            getLogo() { return this.get('logo') || ''; },
+            saveLogo(dataUrl) { this.set('logo', dataUrl); },
             initData() {
                 if (!this.jobs().length) this.saveJobs([{ id: 1, title: 'Aide Cuisinier', city: 'paris', contract: 'CDI', desc: 'Restaurant recherche aide cuisinier.', date: '2024-01-15' }, { id: 2, title: 'Agent Entretien', city: 'lyon', contract: 'CDD', desc: 'Nettoyage bureaux.', date: '2024-02-01' }, { id: 3, title: 'Manutentionnaire', city: 'marseille', contract: 'Intérim', desc: 'Entrepôt logistique.', date: '2024-02-15' }, { id: 4, title: 'Aide à domicile', city: 'paris', contract: 'CDI', desc: 'Aide aux personnes âgées.', date: '2024-03-01' }]);
             },
-            // Store file as base64 in localStorage with size check
             storeFile(file, callback) {
-                if (file.size > 4 * 1024 * 1024) { toast(I18N.t('toast.fileLarge'), 'error'); return; }
+                if (file.size > 20 * 1024 * 1024) { toast(I18N.t('toast.fileLarge'), 'error'); return; }
                 var reader = new FileReader();
                 reader.onload = function(e) { callback(e.target.result, file.name, file.type); };
                 reader.readAsDataURL(file);
@@ -812,10 +878,26 @@
         function showSection(id) { var ss = document.querySelectorAll('main > section'); for (var i = 0; i < ss.length; i++) ss[i].classList.add('hidden'); var s = document.getElementById(id); if (s) { s.classList.remove('hidden'); window.scrollTo({ top: s.offsetTop - 80, behavior: 'smooth' }); } var ls = document.querySelectorAll('.nav-links a'); for (var j = 0; j < ls.length; j++) ls[j].classList.remove('active'); var al = document.querySelector('.nav-links a[href="#' + id + '"]'); if (al) al.classList.add('active'); document.getElementById('navMenu').classList.remove('open'); }
 
         function isLoggedIn() { return !!DB.currentUser(); }
-
         function isAdmin() { var u = DB.currentUser(); return u && DB.admins().indexOf(u.email) !== -1; }
 
         function updateUI() { var l = isLoggedIn(), a = isAdmin(); document.getElementById('btnLogin').classList.toggle('hidden', l); document.getElementById('btnRegister').classList.toggle('hidden', l); document.getElementById('btnLogout').classList.toggle('hidden', !l); document.getElementById('adminLink').classList.toggle('hidden', !a); var b = document.getElementById('userBadge'); if (l) { b.classList.remove('hidden'); b.textContent = '👤 ' + DB.currentUser().name; } else { b.classList.add('hidden'); b.textContent = ''; } }
+
+        function updateLogoDisplay() {
+            var logoData = DB.getLogo();
+            var navLogo = document.getElementById('navLogo');
+            var navIcon = document.getElementById('navIcon');
+            var footerLogo = document.getElementById('footerLogo');
+
+            if (logoData) {
+                if (navLogo) { navLogo.src = logoData; navLogo.style.display = 'inline-block'; }
+                if (navIcon) navIcon.style.display = 'none';
+                if (footerLogo) { footerLogo.src = logoData; footerLogo.style.display = 'block'; }
+            } else {
+                if (navLogo) navLogo.style.display = 'none';
+                if (navIcon) navIcon.style.display = 'inline-block';
+                if (footerLogo) footerLogo.style.display = 'none';
+            }
+        }
 
         // ==================== AUTH ====================
         function registerEmail(n, e, p, p2) { if (p !== p2) { toast(I18N.t('toast.passMatch'), 'error'); return; } if (p.length < 6) { toast('❌ 6 caractères minimum', 'error'); return; } if (DB.users().find(function(u) { return u.email === e; })) { toast(I18N.t('toast.emailUsed'), 'error'); return; } var u = { id: 'u' + Date.now(), name: n, email: e, password: p, provider: 'email', createdAt: new Date().toISOString() }; var us = DB.users(); us.push(u); DB.saveUsers(us); DB.saveCurrentUser(u); updateUI(); toast(I18N.t('toast.regOk')); showSection('profile'); }
@@ -834,12 +916,46 @@
 
         function saveProfile(s, c, l) { var u = DB.currentUser(); if (!u) return; u.status = s; u.city = c; u.legalStatus = l; u.profileComplete = true; var us = DB.users(); var i = us.findIndex(function(x) { return x.id === u.id; }); if (i >= 0) us[i] = u; DB.saveUsers(us); DB.saveCurrentUser(u); updateUI(); toast(I18N.t('toast.profOk')); showSection('jobs'); }
 
+        // ==================== MEDIA HELPERS ====================
+        function isVideo(fileType) { return fileType && fileType.startsWith('video/'); }
+        function isImage(fileType) { return fileType && fileType.startsWith('image/'); }
+
+        function renderMediaCard(x) {
+            var mediaHtml = '';
+            if (x.dataUrl) {
+                if (isVideo(x.fileType)) {
+                    mediaHtml = '<div class="media-preview video"><video src="' + x.dataUrl + '" controls style="width:100%;height:140px;object-fit:cover;border-radius:8px;"></video></div>';
+                } else if (isImage(x.fileType)) {
+                    mediaHtml = '<img src="' + x.dataUrl + '" alt="' + x.title + '" class="media-preview" loading="lazy" style="cursor:pointer;">';
+                } else {
+                    mediaHtml = '<div class="media-preview" style="display:flex;align-items:center;justify-content:center;background:#e0e0e0;"><a href="' + x.dataUrl + '" target="_blank" rel="noopener" style="font-size:1.5rem;color:var(--p);text-decoration:none;">📄 ' + x.title + '<br><small style="font-size:0.7rem;">Ouvrir</small></a></div>';
+                }
+            } else {
+                mediaHtml = '<div class="media-preview video"><i class="fas fa-play-circle"></i></div>';
+            }
+            return '<div class="card" style="padding:.8rem;">' + mediaHtml + '<h4 style="font-size:.85rem;">' + x.title + '</h4><span class="badge badge-blue">' + (x.cat || 'Vidéo') + '</span> <span class="badge badge-green">🌐 ' + (x.lang || 'fr').toUpperCase() + '</span></div>';
+        }
+
+        function renderPosterCard(x) {
+            var mediaHtml = '';
+            if (x.dataUrl) {
+                mediaHtml = '<img src="' + x.dataUrl + '" alt="' + x.title + '" class="media-preview" loading="lazy" style="cursor:pointer;">';
+            } else {
+                mediaHtml = '<div class="media-preview" style="display:flex;align-items:center;justify-content:center;"><i class="fas fa-image" style="font-size:2rem;color:#f5576c;"></i></div>';
+            }
+            return '<div class="card" style="padding:.8rem;">' + mediaHtml + '<h4 style="font-size:.85rem;">' + x.title + '</h4><span class="badge badge-blue">' + (x.topic || 'Affiche') + '</span></div>';
+        }
+
         // ==================== RENDER ====================
         function renderJobs() { var c = document.getElementById('jobsList'); if (!c) return; var j = DB.jobs(); var cf = document.getElementById('jobCity').value; var kf = document.getElementById('jobContract').value; var sf = document.getElementById('jobSearch').value.toLowerCase(); if (cf) j = j.filter(function(x) { return x.city === cf; }); if (kf) j = j.filter(function(x) { return x.contract === kf; }); if (sf) j = j.filter(function(x) { return x.title.toLowerCase().indexOf(sf) !== -1; }); if (!j.length) { c.innerHTML = '<p class="loading">' + I18N.t('jobs.noResults') + '</p>'; return; } c.innerHTML = j.map(function(x) { return '<div class="job-card"><h4>' + x.title + '</h4><span class="badge badge-blue">📍 ' + x.city + '</span> <span class="badge badge-green">📄 ' + x.contract + '</span><p style="margin:.4rem 0;font-size:.85rem;">' + (x.desc || '') + '</p><small>' + I18N.t('jobs.published') + ' : ' + x.date + '</small><br><button class="btn btn-primary btn-sm" style="margin-top:.4rem;" onclick="applyJob(' + x.id + ')">' + I18N.t('jobs.apply') + '</button></div>'; }).join(''); populateCities(); }
 
-        function renderVideos() { var c = document.getElementById('videosList'); if (!c) return; var v = DB.videos(); if (!v.length) { c.innerHTML = '<p class="loading">' + I18N.t('vid.noVideos') + '</p>'; return; } c.innerHTML = v.map(function(x) { var mediaHtml = ''; if (x.dataUrl) { if (x.fileType && x.fileType.startsWith('video/')) { mediaHtml = '<div class="media-preview video"><video src="' + x.dataUrl + '" controls preload="metadata" style="width:100%;height:140px;object-fit:cover;border-radius:8px;"></video></div>'; } else { mediaHtml = '<img src="' + x.dataUrl + '" alt="' + x.title + '" class="media-preview" loading="lazy">'; } } else { mediaHtml = '<div class="media-preview video"><i class="fas fa-play-circle"></i></div>'; } return '<div class="card" style="padding:.8rem;">' + mediaHtml + '<h4 style="font-size:.85rem;">' + x.title + '</h4><span class="badge badge-blue">' + (x.cat || 'Vidéo') + '</span> <span class="badge badge-green">🌐 ' + (x.lang || 'fr').toUpperCase() + '</span></div>'; }).join(''); }
+        function renderVideos() { var c = document.getElementById('videosList'); if (!c) return; var v = DB.videos(); if (!v.length) { c.innerHTML = '<p class="loading">' + I18N.t('vid.noVideos') + '</p>'; return; } c.innerHTML = v.map(function(x) { return renderMediaCard(x); }).join(''); }
 
-        function renderPosters() { var c = document.getElementById('postersList'); if (!c) return; var p = DB.posters(); if (!p.length) { c.innerHTML = '<p class="loading">' + I18N.t('post.noPosters') + '</p>'; return; } c.innerHTML = p.map(function(x) { var mediaHtml = ''; if (x.dataUrl) { mediaHtml = '<img src="' + x.dataUrl + '" alt="' + x.title + '" class="media-preview" loading="lazy">'; } else { mediaHtml = '<div class="media-preview" style="display:flex;align-items:center;justify-content:center;"><i class="fas fa-image" style="font-size:2rem;color:#f5576c;"></i></div>'; } return '<div class="card" style="padding:.8rem;">' + mediaHtml + '<h4 style="font-size:.85rem;">' + x.title + '</h4><span class="badge badge-blue">' + (x.topic || 'Affiche') + '</span></div>'; }).join(''); }
+        function renderHomeVideos() { var c = document.getElementById('homeVideosList'); if (!c) return; var v = DB.videos(); if (!v.length) { c.innerHTML = '<p class="loading" style="grid-column:1/-1;">Aucun média pour le moment.</p>'; return; } var latest = v.slice(-3).reverse(); c.innerHTML = latest.map(function(x) { return renderMediaCard(x); }).join(''); }
+
+        function renderPosters() { var c = document.getElementById('postersList'); if (!c) return; var p = DB.posters(); if (!p.length) { c.innerHTML = '<p class="loading">' + I18N.t('post.noPosters') + '</p>'; return; } c.innerHTML = p.map(function(x) { return renderPosterCard(x); }).join(''); }
+
+        function renderHomePosters() { var c = document.getElementById('homePostersList'); if (!c) return; var p = DB.posters(); if (!p.length) { c.innerHTML = '<p class="loading" style="grid-column:1/-1;">Aucune affiche pour le moment.</p>'; return; } var latest = p.slice(-3).reverse(); c.innerHTML = latest.map(function(x) { return renderPosterCard(x); }).join(''); }
 
         function renderVolunteering() { var d = [{ org: 'Restos du Cœur', city: 'paris', task: 'Distribution alimentaire' }, { org: 'La Cimade', city: 'lyon', task: 'Accompagnement juridique' }, { org: 'Secours Populaire', city: 'marseille', task: 'Aide aux réfugiés' }]; document.getElementById('volList').innerHTML = d.map(function(v) { return '<div class="job-card" style="border-left-color:var(--s)"><h4>' + v.org + '</h4><span class="badge badge-blue">📍 ' + v.city + '</span><p style="margin:.4rem 0;font-size:.85rem;">' + v.task + '</p><button class="btn btn-outline btn-sm" style="border-color:var(--s);color:var(--s)" onclick="volSign(\'' + v.org + '\')">' + I18N.t('vol.btn') + '</button></div>'; }).join(''); }
 
@@ -849,21 +965,25 @@
 
         function volSign(o) { if (!isLoggedIn()) { toast(I18N.t('toast.loginReq'), 'warning'); showSection('register'); return; } toast(I18N.t('toast.volunteerOk') + o); }
 
-        function renderAll() { renderJobs(); renderVideos(); renderPosters(); renderVolunteering(); }
+        function renderAll() { renderJobs(); renderVideos(); renderPosters(); renderVolunteering(); renderHomeVideos(); renderHomePosters(); }
 
         // ==================== ADMIN ====================
-        function renderAdmin(tab) { var c = document.getElementById('adminContent'); if (!c) return; var us = DB.users(), js = DB.jobs(), vs = DB.videos(), ps = DB.posters(), ads = DB.admins(); if (tab === 'dashboard') c.innerHTML = '<div class="stat-grid">' + [{ l: I18N.t('admin.users'), n: us.length }, { l: I18N.t('admin.jobs'), n: js.length }, { l: I18N.t('admin.videos'), n: vs.length }, { l: I18N.t('admin.posters'), n: ps.length }].map(function(s) { return '<div class="card"><div class="stat-num">' + s.n + '</div><div style="font-size:.8rem;color:#999;">' + s.l + '</div></div>'; }).join('') + '</div>'; else if (tab === 'users') c.innerHTML = '<table><tr><th>Nom</th><th>Email</th><th>Action</th></tr>' + us.map(function(u) { return '<tr><td>' + u.name + '</td><td>' + u.email + '</td><td><button class="btn btn-danger btn-sm" onclick="delU(\'' + u.id + '\')">🗑️</button></td></tr>'; }).join('') + '</table>'; else if (tab === 'jobs-manage') c.innerHTML = '<button class="btn btn-primary btn-sm" onclick="addJ()" style="margin-bottom:.75rem;">+ ' + I18N.t('admin.jobs') + '</button><table><tr><th>Titre</th><th>Ville</th><th>Action</th></tr>' + js.map(function(j) { return '<tr><td>' + j.title + '</td><td>' + j.city + '</td><td><button class="btn btn-danger btn-sm" onclick="delJ(' + j.id + ')">🗑️</button></td></tr>'; }).join('') + '</table>'; else if (tab === 'videos-manage') c.innerHTML = '<button class="btn btn-primary btn-sm" onclick="triggerVideoUpload()" style="margin-bottom:.75rem;">+ ' + I18N.t('admin.videos') + ' (Fichier réel)</button><table style="margin-top:.5rem;"><tr><th>Aperçu</th><th>Titre</th><th>Type</th><th>Action</th></tr>' + vs.map(function(v) { return '<tr><td>' + (v.dataUrl ? (v.fileType && v.fileType.startsWith('video/') ? '<video src="' + v.dataUrl + '" style="width:60px;height:40px;object-fit:cover;border-radius:4px;"></video>' : '<img src="' + v.dataUrl + '" style="width:60px;height:40px;object-fit:cover;border-radius:4px;">') : '📹') + '</td><td>' + v.title + '</td><td>' + (v.fileType || 'n/a') + '</td><td><button class="btn btn-danger btn-sm" onclick="delV(' + v.id + ')">🗑️</button></td></tr>'; }).join('') + '</table>'; else if (tab === 'posters-manage') c.innerHTML = '<button class="btn btn-primary btn-sm" onclick="triggerPosterUpload()" style="margin-bottom:.75rem;">+ ' + I18N.t('admin.posters') + ' (Image réelle)</button><table style="margin-top:.5rem;"><tr><th>Aperçu</th><th>Titre</th><th>Sujet</th><th>Action</th></tr>' + ps.map(function(p) { return '<tr><td>' + (p.dataUrl ? '<img src="' + p.dataUrl + '" style="width:60px;height:40px;object-fit:cover;border-radius:4px;">' : '🖼️') + '</td><td>' + p.title + '</td><td>' + (p.topic || '') + '</td><td><button class="btn btn-danger btn-sm" onclick="delP(' + p.id + ')">🗑️</button></td></tr>'; }).join('') + '</table>'; else if (tab === 'admins') c.innerHTML = '<button class="btn btn-primary btn-sm" onclick="addA()" style="margin-bottom:.75rem;">+ ' + I18N.t('admin.admins') + '</button><table><tr><th>Email</th><th>Action</th></tr>' + ads.map(function(a) { return '<tr><td>' + a + '</td><td>' + (a !== 'mosab649@gmail.com' ? '<button class="btn btn-danger btn-sm" onclick="remA(\'' + a + '\')">🗑️</button>' : '<span class="badge badge-blue">Principal</span>') + '</td></tr>'; }).join('') + '</table>'; }
+        function renderAdmin(tab) { var c = document.getElementById('adminContent'); if (!c) return; var us = DB.users(), js = DB.jobs(), vs = DB.videos(), ps = DB.posters(), ads = DB.admins(); if (tab === 'dashboard') c.innerHTML = '<div class="stat-grid">' + [{ l: I18N.t('admin.users'), n: us.length }, { l: I18N.t('admin.jobs'), n: js.length }, { l: I18N.t('admin.videos'), n: vs.length }, { l: I18N.t('admin.posters'), n: ps.length }].map(function(s) { return '<div class="card"><div class="stat-num">' + s.n + '</div><div style="font-size:.8rem;color:#999;">' + s.l + '</div></div>'; }).join('') + '</div>'; else if (tab === 'users') c.innerHTML = '<table><tr><th>Nom</th><th>Email</th><th>Action</th></tr>' + us.map(function(u) { return '<tr><td>' + u.name + '</td><td>' + u.email + '</td><td><button class="btn btn-danger btn-sm" onclick="delU(\'' + u.id + '\')">🗑️</button></td></tr>'; }).join('') + '</table>'; else if (tab === 'jobs-manage') c.innerHTML = '<button class="btn btn-primary btn-sm" onclick="addJ()" style="margin-bottom:.75rem;">+ ' + I18N.t('admin.jobs') + '</button><table><tr><th>Titre</th><th>Ville</th><th>Action</th></tr>' + js.map(function(j) { return '<tr><td>' + j.title + '</td><td>' + j.city + '</td><td><button class="btn btn-danger btn-sm" onclick="delJ(' + j.id + ')">🗑️</button></td></tr>'; }).join('') + '</table>'; else if (tab === 'videos-manage') c.innerHTML = '<button class="btn btn-primary btn-sm" onclick="triggerVideoUpload()" style="margin-bottom:.75rem;">+ ' + I18N.t('admin.videos') + ' (Tout type, max 20MB)</button><table style="margin-top:.5rem;"><tr><th>Aperçu</th><th>Titre</th><th>Type</th><th>Action</th></tr>' + vs.map(function(v) { return '<tr><td>' + (v.dataUrl ? (isVideo(v.fileType) ? '<video src="' + v.dataUrl + '" style="width:60px;height:40px;object-fit:cover;border-radius:4px;"></video>' : (isImage(v.fileType) ? '<img src="' + v.dataUrl + '" style="width:60px;height:40px;object-fit:cover;border-radius:4px;">' : '<a href="' + v.dataUrl + '" target="_blank" rel="noopener" style="font-size:1.5rem;">📄</a>')) : '📹') + '</td><td>' + v.title + '</td><td>' + (v.fileType || 'n/a') + '</td><td><button class="btn btn-danger btn-sm" onclick="delV(' + v.id + ')">🗑️</button></td></tr>'; }).join('') + '</table>'; else if (tab === 'posters-manage') c.innerHTML = '<button class="btn btn-primary btn-sm" onclick="triggerPosterUpload()" style="margin-bottom:.75rem;">+ ' + I18N.t('admin.posters') + ' (Image)</button><table style="margin-top:.5rem;"><tr><th>Aperçu</th><th>Titre</th><th>Sujet</th><th>Action</th></tr>' + ps.map(function(p) { return '<tr><td>' + (p.dataUrl ? '<img src="' + p.dataUrl + '" style="width:60px;height:40px;object-fit:cover;border-radius:4px;">' : '🖼️') + '</td><td>' + p.title + '</td><td>' + (p.topic || '') + '</td><td><button class="btn btn-danger btn-sm" onclick="delP(' + p.id + ')">🗑️</button></td></tr>'; }).join('') + '</table>'; else if (tab === 'settings') c.innerHTML = '<h3>🖼️ Logo de l\'organisation</h3><p style="font-size:0.85rem;color:var(--t2);margin-bottom:1rem;">Taille recommandée : 100x100 pixels. Le logo apparaîtra dans l\'en-tête et le pied de page.</p><div style="margin-bottom:1rem;">' + (DB.getLogo() ? '<img src="' + DB.getLogo() + '" style="width:100px;height:100px;object-fit:contain;border:2px solid var(--bdr);border-radius:8px;padding:4px;background:white;">' : '<div style="width:100px;height:100px;border:2px dashed var(--bdr);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--t2);font-size:0.8rem;">Aucun logo</div>') + '</div><button class="btn btn-primary" onclick="triggerLogoUpload()">📁 Changer le logo</button>' + (DB.getLogo() ? '<button class="btn btn-outline" style="margin-left:0.5rem;color:var(--d);border-color:var(--d);" onclick="removeLogo()">🗑️ Supprimer</button>' : ''); else if (tab === 'admins') c.innerHTML = '<button class="btn btn-primary btn-sm" onclick="addA()" style="margin-bottom:.75rem;">+ ' + I18N.t('admin.admins') + '</button><table><tr><th>Email</th><th>Action</th></tr>' + ads.map(function(a) { return '<tr><td>' + a + '</td><td>' + (a !== 'mosab649@gmail.com' ? '<button class="btn btn-danger btn-sm" onclick="remA(\'' + a + '\')">🗑️</button>' : '<span class="badge badge-blue">Principal</span>') + '</td></tr>'; }).join('') + '</table>'; }
 
         // ==================== FILE UPLOAD TRIGGERS ====================
-        function triggerVideoUpload() { var input = document.createElement('input'); input.type = 'file'; input.accept = 'video/*'; input.onchange = function(e) { var file = e.target.files[0]; if (!file) return; DB.storeFile(file, function(dataUrl, fileName, fileType) { var title = prompt('🎬 Titre de la vidéo :', fileName || 'Vidéo'); if (!title) return; var cat = prompt('📂 Catégorie :', 'Emploi') || 'Emploi'; var lang = prompt('🌐 Langue (fr/en/ar) :', 'fr') || 'fr'; var vs = DB.videos(); vs.push({ id: Date.now(), title: title, cat: cat, lang: lang, dataUrl: dataUrl, fileName: fileName, fileType: fileType }); DB.saveVideos(vs); renderAdmin('videos-manage'); renderVideos(); toast(I18N.t('toast.vidAdd')); }); }; input.click(); }
+        function triggerVideoUpload() { var input = document.createElement('input'); input.type = 'file'; input.accept = '*/*'; input.onchange = function(e) { var file = e.target.files[0]; if (!file) return; DB.storeFile(file, function(dataUrl, fileName, fileType) { var title = prompt('🎬 Titre du média :', fileName || 'Média'); if (!title) return; var cat = prompt('📂 Catégorie :', 'Emploi') || 'Emploi'; var lang = prompt('🌐 Langue (fr/en/ar) :', 'fr') || 'fr'; var vs = DB.videos(); vs.push({ id: Date.now(), title: title, cat: cat, lang: lang, dataUrl: dataUrl, fileName: fileName, fileType: fileType }); DB.saveVideos(vs); renderAdmin('videos-manage'); renderVideos(); renderHomeVideos(); toast(I18N.t('toast.vidAdd')); }); }; input.click(); }
 
-        function triggerPosterUpload() { var input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*'; input.onchange = function(e) { var file = e.target.files[0]; if (!file) return; DB.storeFile(file, function(dataUrl, fileName, fileType) { var title = prompt('🖼️ Titre de l\'affiche :', fileName || 'Affiche'); if (!title) return; var topic = prompt('🏷️ Sujet :', 'Droits') || 'Droits'; var ps = DB.posters(); ps.push({ id: Date.now(), title: title, topic: topic, dataUrl: dataUrl, fileName: fileName, fileType: fileType }); DB.savePosters(ps); renderAdmin('posters-manage'); renderPosters(); toast(I18N.t('toast.postAdd')); }); }; input.click(); }
+        function triggerPosterUpload() { var input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*'; input.onchange = function(e) { var file = e.target.files[0]; if (!file) return; DB.storeFile(file, function(dataUrl, fileName, fileType) { var title = prompt('🖼️ Titre de l\'affiche :', fileName || 'Affiche'); if (!title) return; var topic = prompt('🏷️ Sujet :', 'Droits') || 'Droits'; var ps = DB.posters(); ps.push({ id: Date.now(), title: title, topic: topic, dataUrl: dataUrl, fileName: fileName, fileType: fileType }); DB.savePosters(ps); renderAdmin('posters-manage'); renderPosters(); renderHomePosters(); toast(I18N.t('toast.postAdd')); }); }; input.click(); }
+
+        function triggerLogoUpload() { var input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*'; input.onchange = function(e) { var file = e.target.files[0]; if (!file) return; DB.storeFile(file, function(dataUrl) { DB.saveLogo(dataUrl); updateLogoDisplay(); renderAdmin('settings'); toast(I18N.t('toast.logoUpdated')); }); }; input.click(); }
+
+        function removeLogo() { if (!confirm('Supprimer le logo ?')) return; DB.saveLogo(''); updateLogoDisplay(); renderAdmin('settings'); toast('🗑️ Logo supprimé'); }
 
         // ==================== ADMIN CRUD ====================
         function delU(id) { if (!confirm('Supprimer ?')) return; DB.saveUsers(DB.users().filter(function(u) { return u.id !== id; })); renderAdmin('users'); toast(I18N.t('toast.userDel')); }
         function delJ(id) { DB.saveJobs(DB.jobs().filter(function(j) { return j.id !== id; })); renderAdmin('jobs-manage'); renderJobs(); toast(I18N.t('toast.jobDel')); }
-        function delV(id) { DB.saveVideos(DB.videos().filter(function(v) { return v.id !== id; })); renderAdmin('videos-manage'); renderVideos(); toast(I18N.t('toast.vidDel')); }
-        function delP(id) { DB.savePosters(DB.posters().filter(function(p) { return p.id !== id; })); renderAdmin('posters-manage'); renderPosters(); toast(I18N.t('toast.postDel')); }
+        function delV(id) { DB.saveVideos(DB.videos().filter(function(v) { return v.id !== id; })); renderAdmin('videos-manage'); renderVideos(); renderHomeVideos(); toast(I18N.t('toast.vidDel')); }
+        function delP(id) { DB.savePosters(DB.posters().filter(function(p) { return p.id !== id; })); renderAdmin('posters-manage'); renderPosters(); renderHomePosters(); toast(I18N.t('toast.postDel')); }
         function addJ() { var t = prompt('Titre :'); if (!t) return; var c = prompt('Ville :'); if (!c) return; var k = prompt('Contrat :') || 'CDI'; var d = prompt('Description :') || ''; var js = DB.jobs(); js.push({ id: Date.now(), title: t, city: c.toLowerCase(), contract: k, desc: d, date: new Date().toISOString().split('T')[0] }); DB.saveJobs(js); renderAdmin('jobs-manage'); renderJobs(); toast(I18N.t('toast.jobAdd')); }
         function addA() { var e = prompt('Email admin :'); if (!e) return; var a = DB.admins(); if (a.indexOf(e) !== -1) { toast('⚠️ Déjà admin', 'warning'); return; } a.push(e); DB.saveAdmins(a); renderAdmin('admins'); toast(I18N.t('toast.adminAdd')); }
         function remA(e) { if (e === 'mosab649@gmail.com') { toast('⚠️ Protégé', 'warning'); return; } DB.saveAdmins(DB.admins().filter(function(a) { return a !== e; })); renderAdmin('admins'); toast(I18N.t('toast.adminRem')); }
@@ -873,6 +993,7 @@
             DB.initData();
             I18N.apply();
             updateUI();
+            updateLogoDisplay();
             renderAll();
             document.getElementById('langSwitch').addEventListener('change', function() { I18N.switchLang(this.value); });
             document.getElementById('navToggle').addEventListener('click', function() { document.getElementById('navMenu').classList.toggle('open'); });
@@ -887,7 +1008,7 @@
             document.querySelectorAll('.nav-links a').forEach(function(a) { a.addEventListener('click', function(e) { e.preventDefault(); var id = this.getAttribute('href').replace('#', ''); if (id === 'admin' && !isAdmin()) { toast(I18N.t('toast.adminOnly'), 'warning'); return; } showSection(id); if (id === 'admin') renderAdmin('dashboard'); }); });
             document.querySelectorAll('.admin-tab').forEach(function(t) { t.addEventListener('click', function() { document.querySelectorAll('.admin-tab').forEach(function(x) { x.classList.remove('active'); }); this.classList.add('active'); renderAdmin(this.getAttribute('data-tab')); }); });
             if (isLoggedIn()) { document.getElementById('register').classList.add('hidden'); document.getElementById('profile').classList.add('hidden'); }
-            console.log('✅ Nouvel horizon d\'emploi - Prêt (Média Réel)');
+            console.log('✅ Nouvel horizon d\'emploi - Prêt (Lille, Logo, Médias Accueil)');
             console.log('👤 Admin : mosab649@gmail.com / 123');
         }
         document.addEventListener('DOMContentLoaded', init);
