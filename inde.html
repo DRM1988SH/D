@@ -1,0 +1,1999 @@
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة فرصة جديدة | معاً للكرامة والعمل</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            olive: '#4A5D4E',      /* أخضر زيتوني مريح */
+                            oliveLight: '#F0F4F1', /* زيتوني خفيف جداً للخلفيات */
+                            sky: '#E0F2FE',        /* أزرق سماوي ناعم */
+                            beige: '#FDFBF7',      /* بيج دافئ للخلفية العامة */
+                            accent: '#D97706',     /* برتقالي دافئ للتنبيه الإيجابي والزر */
+                            dark: '#1E293B'        /* رمادي داكن للنصوص */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Cairo', 'Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts: Cairo for Arabic, Inter for Latin -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #FDFBF7;
+        }
+        /* تطبيق خطوط متناسبة حسب اتجاه المستند */
+        html[dir="rtl"] body {
+            font-family: 'Cairo', sans-serif;
+        }
+        html[dir="ltr"] body {
+            font-family: 'Inter', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FDFBF7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4A5D4E;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="text-brand-dark flex flex-col min-h-screen transition-all duration-300 relative pb-20">
+
+    <!-- نافذة منبثقة تفاعلية للإشعارات (مترجمة لثلاث لغات) -->
+    <div id="custom-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl border-t-4 border-brand-olive transform scale-95 transition-transform duration-300" id="modal-card">
+            <div class="flex items-center gap-3 text-brand-olive mb-4">
+                <i data-lucide="shield-check" class="w-8 h-8 flex-shrink-0 text-brand-olive"></i>
+                <h3 class="text-xl font-bold" id="modal-title"></h3>
+            </div>
+            <p class="text-gray-600 mb-6 text-sm leading-relaxed" id="modal-message"></p>
+            <button onclick="closeModal()" id="modal-btn" class="w-full bg-brand-olive hover:bg-opacity-90 text-white font-semibold py-2 px-4 rounded-xl transition duration-200">
+                موافق
+            </button>
+        </div>
+    </div>
+
+    <!-- الهيدر والترويسة مع مبدّل اللغات -->
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- الشعار والاسم -->
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 bg-brand-olive rounded-xl flex items-center justify-center text-white shadow-md">
+                    <i data-lucide="hand-helping" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-brand-olive tracking-tight" data-i18n="logo-title">فرصة جديدة</h1>
+                    <p class="text-xs text-gray-500 font-medium" data-i18n="logo-subtitle">معاً للكرامة والعمل</p>
+                </div>
+            </div>
+            
+            <!-- قائمة التنقل السريع -->
+            <nav class="hidden lg:flex items-center gap-6">
+                <a href="#jobs-section" class="text-gray-600 hover:text-brand-olive font-medium transition duration-200" data-i18n="nav-jobs">فرص العمل المتاحة</a>
+                <a href="#register-hub" class="text-gray-600 hover:text-brand-olive font-medium transition duration-200" data-i18n="nav-register">مركز التسجيل والمشاركة</a>
+                <a href="#resources-section" class="text-gray-600 hover:text-brand-olive font-medium transition duration-200" data-i18n="nav-resources">الموارد والتدريب</a>
+                <a href="#success-stories" class="text-gray-600 hover:text-brand-olive font-medium transition duration-200" data-i18n="nav-stories">قصص نجاح</a>
+            </nav>
+
+            <!-- أداة التبديل بين اللغات و زر المساعدة المباشرة -->
+            <div class="flex items-center gap-3">
+                <!-- أزرار تبديل اللغة -->
+                <div class="bg-gray-100 p-1 rounded-xl flex items-center gap-1 text-xs font-bold">
+                    <button onclick="switchLanguage('ar')" id="lang-ar" class="px-2.5 py-1.5 rounded-lg transition duration-150 bg-brand-olive text-white shadow-sm">العربية</button>
+                    <button onclick="switchLanguage('en')" id="lang-en" class="px-2.5 py-1.5 rounded-lg transition duration-150 text-gray-500 hover:text-brand-dark">EN</button>
+                    <button onclick="switchLanguage('fr')" id="lang-fr" class="px-2.5 py-1.5 rounded-lg transition duration-150 text-gray-500 hover:text-brand-dark">FR</button>
+                </div>
+
+                <a href="#resources-section" class="hidden sm:flex bg-brand-olive text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-opacity-90 transition duration-200 shadow-sm items-center gap-2">
+                    <i data-lucide="help-circle" class="w-4 h-4"></i>
+                    <span data-i18n="btn-help">مساعدة قانونية وفورية</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- البانر الرئيسي الترحيبي -->
+    <section class="relative overflow-hidden py-12 md:py-20 bg-gradient-to-br from-brand-oliveLight via-white to-brand-sky">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- النصوص والدعوة للتفاعل -->
+            <div class="lg:col-span-7 space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-sky text-brand-olive text-xs font-semibold">
+                    <i data-lucide="shield-alert" class="w-4 h-4 text-brand-olive flex-shrink-0"></i>
+                    <span data-i18n="hero-security-alert">بياناتك في أمان تام بنسبة 100% ولا تُشارك مع أي سلطة أمنية</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-extrabold text-brand-olive leading-tight" data-i18n="hero-title">
+                    الكرامة الإنسانية تبدأ بفرصة عمل عادلة ومستقرة.
+                </h2>
+                <p class="text-gray-600 text-lg md:text-xl leading-relaxed" data-i18n="hero-desc">
+                    نحن نؤمن بأن المهارات لا تحتاج إلى أوراق معقدة لتثبت جدارتها. نربطك مباشرة مع أصحاب عمل محليين وشركات متضامنة مستعدة لتوظيفك ودعمك لتوثيق أوضاعك القانونية بسلام وأمان.
+                </p>
+
+                <!-- أزرار الإجراءات السريعة -->
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <a href="#jobs-section" class="bg-brand-olive hover:bg-opacity-95 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg transition duration-200 flex items-center gap-2">
+                        <span data-i18n="hero-btn-browse">تصفح الوظائف الآن</span>
+                        <i data-lucide="arrow-left" class="w-5 h-5 rtl-rotate-180"></i>
+                    </a>
+                    <a href="#register-hub" class="bg-white border border-gray-200 hover:border-brand-olive text-gray-700 font-bold px-8 py-3.5 rounded-xl transition duration-200 flex items-center gap-2">
+                        <i data-lucide="user-plus" class="w-5 h-5 text-brand-olive"></i>
+                        <span data-i18n="hero-btn-register">افتح مركز التسجيل</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- بطاقة إحصائيات معبرة عن التمكين والكرامة -->
+            <div class="lg:col-span-5 flex justify-center">
+                <div class="relative w-full max-w-sm">
+                    <div class="absolute inset-0 bg-brand-olive rounded-3xl transform rotate-6 opacity-10"></div>
+                    <div class="absolute inset-0 bg-brand-sky rounded-3xl transform -rotate-3 opacity-30"></div>
+                    
+                    <div class="relative bg-white p-6 rounded-3xl shadow-xl border border-gray-100 text-center space-y-4">
+                        <div class="w-20 h-20 bg-brand-sky rounded-full flex items-center justify-center mx-auto text-brand-olive">
+                            <i data-lucide="briefcase" class="w-10 h-10"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-brand-olive" data-i18n="stats-title">الهدف الأساسي للمنصة</h4>
+                        <p class="text-sm text-gray-500 leading-relaxed" data-i18n="stats-desc">
+                            تمكين العمالة المهاجرة عبر التدريب المجاني، الاستشارات القانونية الآمنة، والتوظيف المباشر دون تعقيدات ورقية تعجيزية.
+                        </p>
+                        <div class="grid grid-cols-3 gap-2 pt-2 border-t border-gray-100">
+                            <div class="text-center">
+                                <span class="block text-xl font-bold text-brand-olive" id="counter-jobs">142</span>
+                                <span class="text-xs text-gray-400" data-i18n="stats-jobs">فرصة نشطة</span>
+                            </div>
+                            <div class="text-center border-x border-gray-100">
+                                <span class="block text-xl font-bold text-brand-olive">100%</span>
+                                <span class="text-xs text-gray-400" data-i18n="stats-security">سرية وأمان</span>
+                            </div>
+                            <div class="text-center">
+                                <span class="block text-xl font-bold text-brand-olive">32</span>
+                                <span class="text-xs text-gray-400" data-i18n="stats-partners">شريك متعاون</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 h-8 bg-brand-beige"></div>
+    </section>
+
+    <!-- شريط الحماية والسرية المكرر لزرع الطمأنينة -->
+    <div class="bg-emerald-50 border-y border-emerald-100 py-3">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-center gap-3 text-emerald-800 text-sm text-center">
+            <span class="flex items-center gap-1.5 font-semibold">
+                <i data-lucide="shield-check" class="w-5 h-5 text-emerald-600 flex-shrink-0"></i>
+                <span data-i18n="firewall-title">مبدأ عدم الإبلاغ (Firewall Policy):</span>
+            </span>
+            <span data-i18n="firewall-desc">نحن ملتزمون بعدم ربط الخدمات الاجتماعية والمهنية بأجهزة إنفاذ القانون وقوانين الهجرة. تصفحك آمن تماماً هنا.</span>
+        </div>
+    </div>
+
+    <!-- قسم الخدمات والمحاور الرئيسية (الثلاث بطاقات المطلوبة بصرياً) -->
+    <section class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <h3 class="text-2xl md:text-3xl font-bold text-brand-olive" data-i18n="services-title">خدماتنا الركيزة لتمكين المهاجرين</h3>
+            <p class="text-gray-500 mt-2 text-sm md:text-base" data-i18n="services-subtitle">نوفر الدعم الشامل والموجه في شتى المجالات الحياتية والمهنية مجاناً وبلا قيود.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- البطاقة 1: دورات تدريبية مجانية -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
+                        <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-brand-olive" data-i18n="card1-title">أكاديميات وتدريب مهني مجاني</h4>
+                    <p class="text-gray-500 text-sm leading-relaxed" data-i18n="card1-desc">
+                        برامج تدريبية تهدف لبناء المهارات التقنية والحرفية مجاناً عبر منصات رائدة محلياً وإقليمياً لمساعدتك على بدء العمل الحر وتأمين مصدر دخل.
+                    </p>
+                </div>
+                <a href="#resources-section" class="mt-6 text-indigo-600 hover:text-indigo-700 font-bold text-sm inline-flex items-center gap-1">
+                    <span data-i18n="card1-link">استكشف المنصات التعليمية</span>
+                    <i data-lucide="chevron-left" class="w-4 h-4 rtl-rotate-180"></i>
+                </a>
+            </div>
+
+            <!-- البطاقة 2: خدمات استشارات قانونية لتوثيق الأوضاع -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
+                        <i data-lucide="scale" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-brand-olive" data-i18n="card2-title">استشارات قانونية ودعم حقوقي</h4>
+                    <p class="text-gray-500 text-sm leading-relaxed" data-i18n="card2-desc">
+                        توفير توجيه مجاني لمعرفة إجراءات الحصول على إقامة عمل قانونية، وفهم آليات تسوية الأوضاع بالتعاون مع المنظمات الموثوقة والجمعيات الحقوقية الدولية.
+                    </p>
+                </div>
+                <a href="#resources-section" class="mt-6 text-emerald-600 hover:text-emerald-700 font-bold text-sm inline-flex items-center gap-1">
+                    <span data-i18n="card2-link">تعرّف على شركائنا القانونيين</span>
+                    <i data-lucide="chevron-left" class="w-4 h-4 rtl-rotate-180"></i>
+                </a>
+            </div>
+
+            <!-- البطاقة 3: قصص نجاح ملهمة -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-brand-olive" data-i18n="card3-title">قصص نجاح من الواقع</h4>
+                    <p class="text-gray-500 text-sm leading-relaxed" data-i18n="card3-desc">
+                        تجارب وقصص ملهمة من أشخاص استطاعوا تأسيس مشاريعهم وتحقيق طموحهم بمساعدة الاندماج الاجتماعي والتدريب وتسهيل المسارات المهنية بسلام.
+                    </p>
+                </div>
+                <a href="#success-stories" class="mt-6 text-amber-600 hover:text-amber-700 font-bold text-sm inline-flex items-center gap-1">
+                    <span data-i18n="card3-link">اقرأ قصص النجاح</span>
+                    <i data-lucide="chevron-left" class="w-4 h-4 rtl-rotate-180"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم فرص العمل المتاحة (مع البحث والتصفية النشطة والذكية) -->
+    <section id="jobs-section" class="py-12 bg-brand-oliveLight border-y border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+                <div>
+                    <h3 class="text-2xl md:text-3xl font-bold text-brand-olive" data-i18n="jobs-section-title">فرص العمل المتاحة من شركاء متضامنين</h3>
+                    <p class="text-gray-500 mt-1 text-sm" data-i18n="jobs-section-desc">هذه الشركات تدعم الكرامة الإنسانية، وتتفهم الوضع الخاص للعمال وتوفر دعماً فورياً للاندماج وتوثيق الأوراق بمرونة عالية.</p>
+                </div>
+                <!-- أداة تنبيه سريعة مرئية للمستخدم -->
+                <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-gray-200 shadow-sm text-xs font-semibold text-gray-600">
+                    <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping"></span>
+                    <span data-i18n="jobs-live-update">تحديث مستمر: تم إضافة 5 وظائف اليوم</span>
+                </div>
+            </div>
+
+            <!-- لوحة البحث والفرز والفلترة التفاعلية -->
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="relative">
+                    <label class="block text-xs font-semibold text-gray-500 mb-1" data-i18n="search-label-skill">ابحث عن مهارة أو تخصص</label>
+                    <div class="relative">
+                        <i data-lucide="search" class="w-5 h-5 absolute right-3 top-2.5 text-gray-400"></i>
+                        <input type="text" id="search-skill" oninput="filterJobs()" placeholder="..." class="w-full pr-10 pl-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-olive focus:bg-white transition duration-200">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1" data-i18n="search-label-city">المدينة أو الموقع</label>
+                    <select id="filter-city" onchange="filterJobs()" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-olive focus:bg-white transition duration-200">
+                        <!-- الخيارات ستتم ترجمتها ديناميكياً -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1" data-i18n="search-label-type">نوع الدوام</label>
+                    <select id="filter-type" onchange="filterJobs()" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-olive focus:bg-white transition duration-200">
+                        <!-- الخيارات ستتم ترجمتها ديناميكياً -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- شبكة عرض فرص العمل الحية -->
+            <div id="jobs-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- سيتم ملء هذا القسم عبر الجافا سكريبت بشكل ديناميكي -->
+            </div>
+
+            <!-- رسالة عندما لا توجد نتائج للبحث -->
+            <div id="no-jobs-message" class="hidden text-center py-12 bg-white rounded-2xl border border-dashed border-gray-200">
+                <i data-lucide="folder-search" class="w-12 h-12 mx-auto text-gray-300 mb-2"></i>
+                <h4 class="text-lg font-bold text-gray-500" data-i18n="no-jobs-title">عذراً، لم نجد وظائف مطابقة للبحث</h4>
+                <p class="text-sm text-gray-400 mt-1" data-i18n="no-jobs-desc">حاول تعديل كلمات البحث أو تصفية المدن للحصول على نتائج أفضل.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- مركز التسجيل والمشاركة التفاعلي الجديد (Tabs Section) -->
+    <section id="register-hub" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+            
+            <!-- الهيدر الموحد والتبويبات -->
+            <div class="bg-brand-olive p-6 text-white text-center space-y-4">
+                <h3 class="text-2xl sm:text-3xl font-extrabold" data-i18n="hub-title">بوابة التسجيل والمشاركة الآمنة</h3>
+                <p class="text-brand-sky text-xs sm:text-sm max-w-2xl mx-auto" data-i18n="hub-subtitle">اختر المسار الذي يناسبك، وسجل معنا بسرية وأمان تام بضمانة خيارات التسجيل السريع.</p>
+                
+                <!-- أزرار التبويبات -->
+                <div class="flex flex-wrap items-center justify-center gap-2 pt-2">
+                    <button onclick="switchTab('seeker')" id="tab-seeker" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition duration-200 bg-white text-brand-olive shadow flex items-center gap-2">
+                        <i data-lucide="search-code" class="w-4 h-4"></i>
+                        <span data-i18n="tab-seeker-btn">الباحثين عن عمل</span>
+                    </button>
+                    <button onclick="switchTab('learning')" id="tab-learning" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition duration-200 hover:bg-white hover:text-brand-olive text-white flex items-center gap-2">
+                        <i data-lucide="graduation-cap" class="w-4 h-4"></i>
+                        <span data-i18n="tab-learning-btn">التسجيل للتدريب</span>
+                    </button>
+                    <button onclick="switchTab('volunteer')" id="tab-volunteer" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition duration-200 hover:bg-white hover:text-brand-olive text-white flex items-center gap-2">
+                        <i data-lucide="heart-handshake" class="w-4 h-4"></i>
+                        <span data-i18n="tab-volunteer-btn">التسجيل للتطوع</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- منطقة تحديد الهوية السريع / التسجيل المتعدد للمسارات الثلاثة -->
+            <div class="p-6 border-b border-gray-100 bg-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <h4 class="text-sm font-bold text-gray-700 flex items-center gap-1.5 mb-1">
+                        <i data-lucide="key-round" class="w-4 h-4 text-brand-olive"></i>
+                        <span data-i18n="auth-section-title">التسجيل السريع عبر الهوية الرقمية المفضلة (اختياري)</span>
+                    </h4>
+                    <p class="text-xs text-gray-500" data-i18n="auth-section-subtitle">اختر أحد حساباتك الموثوقة للمزامنة الفورية بلمسة واحدة دون إدخال تفاصيل يدوية معقدة.</p>
+                </div>
+                
+                <!-- أزرار تسجيل الدخول الاجتماعي المباشرة -->
+                <div class="flex flex-wrap items-center gap-2" id="social-auth-group">
+                    <button onclick="triggerSocialAuth('Google')" class="px-3.5 py-2 bg-white hover:bg-gray-100 border border-gray-200 rounded-xl text-xs font-semibold flex items-center gap-2 transition duration-200 shadow-sm">
+                        <i data-lucide="chrome" class="w-4 h-4 text-red-500"></i>
+                        <span>Google</span>
+                    </button>
+                    <button onclick="triggerSocialAuth('Facebook')" class="px-3.5 py-2 bg-white hover:bg-gray-100 border border-gray-200 rounded-xl text-xs font-semibold flex items-center gap-2 transition duration-200 shadow-sm">
+                        <i data-lucide="facebook" class="w-4 h-4 text-blue-600"></i>
+                        <span>Facebook</span>
+                    </button>
+                    <button onclick="triggerSocialAuth('Phone')" class="px-3.5 py-2 bg-white hover:bg-gray-100 border border-gray-200 rounded-xl text-xs font-semibold flex items-center gap-2 transition duration-200 shadow-sm">
+                        <i data-lucide="smartphone" class="w-4 h-4 text-brand-olive"></i>
+                        <span data-i18n="auth-btn-phone">رقم الهاتف</span>
+                    </button>
+                    <button onclick="triggerSocialAuth('Email')" class="px-3.5 py-2 bg-white hover:bg-gray-100 border border-gray-200 rounded-xl text-xs font-semibold flex items-center gap-2 transition duration-200 shadow-sm">
+                        <i data-lucide="mail" class="w-4 h-4 text-amber-600"></i>
+                        <span data-i18n="auth-btn-email">الإيميل</span>
+                    </button>
+                </div>
+
+                <!-- تلميح الاتصال النشط في حال تم الاتصال -->
+                <div id="auth-status-indicator" class="hidden bg-brand-sky border border-brand-olive border-opacity-25 px-4 py-2 rounded-xl text-xs font-bold text-brand-olive flex items-center gap-2">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-brand-olive animate-pulse"></i>
+                    <span id="auth-status-text">متصل عبر Google</span>
+                </div>
+            </div>
+
+            <!-- المحتوى الداخلي للتبويبات -->
+            <div class="p-8 md:p-12">
+                
+                <!-- تبويب 1: الباحثين عن عمل -->
+                <div id="panel-seeker" class="space-y-8">
+                    <div class="border-b border-gray-100 pb-4">
+                        <h4 class="text-xl font-bold text-brand-olive" data-i18n="seeker-panel-title">ملف الباحث عن وظيفة آمنة</h4>
+                        <p class="text-xs text-gray-500" data-i18n="seeker-panel-subtitle">نطابق مهاراتك الفردية واليدوية مع عروض العمل من الشركات والمؤسسات المتضامنة.</p>
+                    </div>
+
+                    <form id="seeker-form" onsubmit="handleTabSubmit(event, 'seeker')" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5" data-i18n="form-label-name">الاسم (أو الاسم المستعار الذي تفضله) *</label>
+                                <input type="text" id="seeker-name" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-olive focus:bg-white transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5" data-i18n="form-label-city">المدينة المتواجد بها حالياً *</label>
+                                <select id="seeker-city" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-olive focus:bg-white transition">
+                                    <!-- المدن ستعبأ ديناميكياً -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5" data-i18n="form-label-phone">رقم هاتف للتواصل (أو حساب تيليجرام/واتساب) *</label>
+                                <input type="text" id="seeker-phone" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-olive focus:bg-white transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5" data-i18n="form-label-skills">أبرز المهارات والحرف التي تتقنها *</label>
+                                <input type="text" id="seeker-skills" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-olive focus:bg-white transition">
+                            </div>
+                        </div>
+
+                        <!-- قسم تحميل السيرة الذاتية التفاعلي المطور -->
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-700" data-i18n="form-label-resume">تحميل السيرة الذاتية (اختياري)</label>
+                            <div id="drop-zone" class="border-2 border-dashed border-gray-300 rounded-2xl p-6 text-center cursor-pointer hover:border-brand-olive bg-gray-50 hover:bg-brand-oliveLight transition duration-200 relative">
+                                <input type="file" id="resume-file" class="hidden" accept=".pdf,.doc,.docx" onchange="handleFileSelect(event)">
+                                <div id="drop-zone-content" class="space-y-2">
+                                    <i data-lucide="cloud-upload" class="w-10 h-10 mx-auto text-brand-olive"></i>
+                                    <p class="text-xs sm:text-sm font-bold text-gray-600" data-i18n="resume-drag-text">اسحب وأفلت ملف السيرة الذاتية هنا أو اضغط للتصفح</p>
+                                    <p class="text-[10px] text-gray-400">PDF, DOCX (Max 10MB)</p>
+                                </div>
+                                <!-- محاكي التحميل -->
+                                <div id="upload-progress-container" class="hidden space-y-2 max-w-xs mx-auto">
+                                    <div class="flex items-center justify-between text-xs font-semibold text-brand-olive">
+                                        <span id="upload-filename">cv_file.pdf</span>
+                                        <span id="upload-percent">0%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+                                        <div id="upload-bar" class="bg-brand-olive h-full transition-all duration-150" style="width: 0%"></div>
+                                    </div>
+                                    <p class="text-[10px] text-emerald-600 font-bold hidden" id="upload-success-badge" data-i18n="resume-success-msg">✓ تم رفع السيرة الذاتية وربطها بنجاح!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" id="seeker-agree" required class="w-4 h-4 text-brand-olive border-gray-300 rounded focus:ring-brand-olive">
+                            <label for="seeker-agree" class="text-xs text-gray-600 font-medium" data-i18n="form-checkbox-label">أوافق على الشروط وأؤكد رغبتي في مطابقة مهاراتي مع فرص العمل الآمنة المتوفرة.</label>
+                        </div>
+
+                        <button type="submit" class="w-full bg-brand-olive hover:bg-opacity-95 text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition duration-200 flex items-center justify-center gap-2">
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                            <span data-i18n="form-btn-submit">إرسال معلوماتي بأمان وتلقي العروض</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- تبويب 2: التسجيل للتعلم والتدريب -->
+                <div id="panel-learning" class="space-y-8 hidden">
+                    <div class="border-b border-gray-100 pb-4">
+                        <h4 class="text-xl font-bold text-brand-olive" data-i18n="learning-panel-title">طلب الانضمام إلى الكورسات والدورات المجانية</h4>
+                        <p class="text-xs text-gray-500" data-i18n="learning-panel-subtitle">سجل اهتمامك لإدراج اسمك في ورش العمل والتدريب المهني ولغات الاندماج مجاناً.</p>
+                    </div>
+
+                    <form id="learning-form" onsubmit="handleTabSubmit(event, 'learning')" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5" data-i18n="form-label-name">الاسم (أو الاسم المستعار الذي تفضله) *</label>
+                                <input type="text" id="learning-name" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-olive focus:bg-white transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5" data-i18n="form-label-course">اختر الدورة التدريبية المطلوبة *</label>
+                                <select id="learning-course" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-olive focus:bg-white transition">
+                                    <option value="" data-i18n="learning-opt-placeholder">اختر المسار الأكاديمي</option>
+                                    <option value="السباكة والكهرباء" data-i18n="learning-opt-1">السباكة والكهرباء والشبكات المنزلية</option>
+                                    <option value="برمجة الويب وتطبيقات الكمبيوتر" data-i18n="learning-opt-2">برمجة الويب وتطبيقات الكمبيوتر</option>
+                                    <option value="تعلم لغات الاندماج السريع" data-i18n="learning-opt-3">تعلم لغات الاندماج السريع (الفرنسية/الإنجليزية)</option>
+                                    <option value="إدارة المشاريع الحرفية الصغيرة" data-i18n="learning-opt-4">إدارة المشاريع الحرفية والطهي الاحترافي</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5" data-i18n="form-label-phone">رقم هاتف للتواصل (أو حساب تيليجرام/واتساب) *</label>
+                                <input type="text" id="learning-phone" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-olive focus:bg-white transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5" data-i18n="form-label-goal">الهدف المرجو من التدريب *</label>
+                                <input type="text" id="learning-goal" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-olive focus:bg-white transition">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-brand-olive hover:bg-opacity-95 text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition duration-200 flex items-center justify-center gap-2">
+                            <i data-lucide="book-open" class="w-5 h-5"></i>
+                            <span data-i18n="learning-btn-submit">تسجيل اهتمامي والبدء في الدراسة</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- تبويب 3: التسجيل للتطوع والمساعدة -->
+                <div id="panel-volunteer" class="space-y-8 hidden">
+                    <div class="border-b border-gray-100 pb-4">
+                        <h4 class="text-xl font-bold text-brand-olive" data-i18n="volunteer-panel-title">طلب الانضمام كشريك متطوع ومساند</h4>
+                        <p class="text-xs text-gray-500" data-i18n="volunteer-panel-subtitle">انضم إلينا كطبيب، محام، مترجم، أو داعم لوجستي لمساندة قضايا الكرامة الإنسانية.</p>
+                    </div>
+
+                    <form id="volunteer-form" onsubmit="handleTabSubmit(event, 'volunteer')" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5" data-i18n="form-label-name">الاسم (أو الاسم المستعار الذي تفضله) *</label>
+                                <input type="text" id="volunteer-name" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-olive focus:bg-white transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5" data-i18n="form-label-volunteer-role">مجال التطوع المفضل *</label>
+                                <select id="volunteer-role" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-olive focus:bg-white transition">
+                                    <option value="" data-i18n="volunteer-opt-placeholder">اختر المجال</option>
+                                    <option value="دعم قانوني واستشارات" data-i18n="volunteer-opt-1">دعم قانوني واستشارات توثيقية</option>
+                                    <option value="تعليم لغات ومهارات" data-i18n="volunteer-opt-2">تدريس لغات وبناء مهارات فنية</option>
+                                    <option value="دعم معنوي ولوجستي" data-i18n="volunteer-opt-3">دعم معنوي، تسويق، أو مرافقة لوجستية</option>
+                                    <option value="دعم طبي وصحي" data-i18n="volunteer-opt-4">رعاية طبية وإسعافات صحية</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5" data-i18n="form-label-phone">رقم هاتف للتواصل (أو حساب تيليجرام/واتساب) *</label>
+                                <input type="text" id="volunteer-phone" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-olive focus:bg-white transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5" data-i18n="form-label-hours">عدد ساعات التطوع المتاحة أسبوعياً *</label>
+                                <input type="number" id="volunteer-hours" required min="1" max="40" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-olive focus:bg-white transition">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-brand-olive hover:bg-opacity-95 text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition duration-200 flex items-center justify-center gap-2">
+                            <i data-lucide="heart" class="w-5 h-5"></i>
+                            <span data-i18n="volunteer-btn-submit">تأكيد التسجيل كمتطوع</span>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم الموارد والمنظمات والتعلم مع روابط حقيقية وفعالة للمستخدمين -->
+    <section id="resources-section" class="py-12 bg-brand-oliveLight border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h3 class="text-2xl md:text-3xl font-bold text-brand-olive" data-i18n="resources-section-title">دليلك الكامل للموارد والتمكين المجاني (روابط حقيقية)</h3>
+                <p class="text-gray-500 mt-2 text-sm" data-i18n="resources-section-subtitle">انقر فوق الروابط الموضحة في الأسفل للوصول المباشر إلى المنصات ومصادر التعلم والمنظمات التضامنية الشريكة بشكل آمن.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- العمود الأول: دورات تعليمية مجانية حقيقية -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-3 pb-4 border-b border-gray-100 text-brand-olive mb-4">
+                            <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                            <h4 class="text-lg font-bold" data-i18n="res-col1-title">منصات تعليمية ودورات</h4>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-gray-50 rounded-xl hover:bg-brand-oliveLight transition duration-200">
+                                <span class="inline-block px-2 py-0.5 bg-green-100 text-green-800 text-xs font-semibold rounded mb-1" data-i18n="res-col1-badge1">منصة عربية رائدة</span>
+                                <h5 class="text-sm font-bold text-brand-olive" data-i18n="res-col1-card1-title">مؤسسة إدراك للتعليم المفتوح</h5>
+                                <p class="text-xs text-gray-500 mt-1 mb-3" data-i18n="res-col1-card1-desc">دورات ومساقات عربية مجانية بالكامل لتعلم مهارات الكمبيوتر، ريادة الأعمال، وصيانة الأجهزة والمبيعات.</p>
+                                <a href="https://www.edraak.org" target="_blank" rel="noopener noreferrer" class="text-xs text-indigo-600 hover:text-indigo-800 font-bold inline-flex items-center gap-1">
+                                    <span data-i18n="res-visit-btn">زيارة المنصة الرسمية لـ إدراك</span>
+                                    <i data-lucide="external-link" class="w-3 h-3"></i>
+                                </a>
+                            </div>
+                            
+                            <div class="p-4 bg-gray-50 rounded-xl hover:bg-brand-oliveLight transition duration-200">
+                                <span class="inline-block px-2 py-0.5 bg-blue-100 text-blue-800 text-xs font-semibold rounded mb-1" data-i18n="res-col1-badge2">تعليم عالمي</span>
+                                <h5 class="text-sm font-bold text-brand-olive" data-i18n="res-col1-card2-title">منصة كورسيرا (Coursera)</h5>
+                                <p class="text-xs text-gray-500 mt-1 mb-3" data-i18n="res-col1-card2-desc">آلاف المساقات التعليمية والدورات المهنية والتقنية المجانية بالتعاون مع أرقى الجامعات العالمية.</p>
+                                <a href="https://www.coursera.org" target="_blank" rel="noopener noreferrer" class="text-xs text-indigo-600 hover:text-indigo-800 font-bold inline-flex items-center gap-1">
+                                    <span data-i18n="res-browse-btn">تصفح دورات Coursera</span>
+                                    <i data-lucide="external-link" class="w-3 h-3"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- العمود الثاني: تعلم اللغات والتواصل -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-3 pb-4 border-b border-gray-100 text-brand-olive mb-4">
+                            <i data-lucide="languages" class="w-6 h-6"></i>
+                            <h4 class="text-lg font-bold" data-i18n="res-col2-title">تعلم اللغات الحية للاندماج</h4>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-gray-50 rounded-xl hover:bg-brand-oliveLight transition duration-200">
+                                <span class="inline-block px-2 py-0.5 bg-purple-100 text-purple-800 text-xs font-semibold rounded mb-1" data-i18n="res-col2-badge1">تطبيق مجاني</span>
+                                <h5 class="text-sm font-bold text-brand-olive" data-i18n="res-col2-card1-title">تطبيق دولينجو (Duolingo)</h5>
+                                <p class="text-xs text-gray-500 mt-1 mb-3" data-i18n="res-col2-card1-desc">أفضل تطبيق مجاني لتعلم اللغات المحلية (الإنجليزية، الفرنسية، الإسبانية) بأسلوب تفاعلي ممتع وبسيط.</p>
+                                <a href="https://www.duolingo.com" target="_blank" rel="noopener noreferrer" class="text-xs text-indigo-600 hover:text-indigo-800 font-bold inline-flex items-center gap-1">
+                                    <span data-i18n="res-learn-btn">بدء التعلم على Duolingo</span>
+                                    <i data-lucide="external-link" class="w-3 h-3"></i>
+                                </a>
+                            </div>
+
+                            <div class="p-4 bg-gray-50 rounded-xl hover:bg-brand-oliveLight transition duration-200">
+                                <span class="inline-block px-2 py-0.5 bg-amber-100 text-amber-800 text-xs font-semibold rounded mb-1" data-i18n="res-col2-badge2">تعليم تفاعلي</span>
+                                <h5 class="text-sm font-bold text-brand-olive" data-i18n="res-col2-card2-title">قنوات بي بي سي التعليمية</h5>
+                                <p class="text-xs text-gray-500 mt-1 mb-3" data-i18n="res-col2-card2-desc">تجميعة لمصادر وقنوات ومواقع تفاعلية لتطوير المحادثة وتجاوز حواجز الخجل للتخاطب بطلاقة.</p>
+                                <a href="https://www.bbc.co.uk/learningenglish" target="_blank" rel="noopener noreferrer" class="text-xs text-indigo-600 hover:text-indigo-800 font-bold inline-flex items-center gap-1">
+                                    <span data-i18n="res-channels-btn">قنوات BBC لتعليم الإنجليزية</span>
+                                    <i data-lucide="external-link" class="w-3 h-3"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- العمود الثالث: منظمات حقوقية وإنسانية داعمة فعلياً -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-3 pb-4 border-b border-gray-100 text-brand-olive mb-4">
+                            <i data-lucide="heart" class="w-6 h-6"></i>
+                            <h4 class="text-lg font-bold" data-i18n="res-col3-title">منظمات حقوقية وإنسانية</h4>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-gray-50 rounded-xl hover:bg-brand-oliveLight transition duration-200">
+                                <span class="inline-block px-2 py-0.5 bg-red-100 text-red-800 text-xs font-semibold rounded mb-1" data-i18n="res-col3-badge1">استشارة وحماية قانونية</span>
+                                <h5 class="text-sm font-bold text-brand-olive" data-i18n="res-col3-card1-title">المفوضية السامية لشؤون اللاجئين</h5>
+                                <p class="text-xs text-gray-500 mt-1 mb-3" data-i18n="res-col3-card1-desc">القسم المخصص لتوفير الحماية القانونية، الإرشاد الإنساني، وتوجيه المهاجرين قانونياً وتسهيل المعاملات الرسمية.</p>
+                                <a href="https://help.unhcr.org" target="_blank" rel="noopener noreferrer" class="text-xs text-indigo-600 hover:text-indigo-800 font-bold inline-flex items-center gap-1">
+                                    <span data-i18n="res-unhcr-btn">الموقع الرسمي لـ UNHCR Help</span>
+                                    <i data-lucide="external-link" class="w-3 h-3"></i>
+                                </a>
+                            </div>
+
+                            <div class="p-4 bg-gray-50 rounded-xl hover:bg-brand-oliveLight transition duration-200">
+                                <span class="inline-block px-2 py-0.5 bg-cyan-100 text-cyan-800 text-xs font-semibold rounded mb-1" data-i18n="res-col3-badge2">منظمة غير حكومية</span>
+                                <h5 class="text-sm font-bold text-brand-olive" data-i18n="res-col3-card2-title">أطباء بلا حدود (MSF)</h5>
+                                <p class="text-xs text-gray-500 mt-1 mb-3" data-i18n="res-col3-card2-desc">منظمات عالمية تقدم دعماً لوجستياً، ورعاية طبية ونفسية، وتوعية بالحقوق والواجبات المهنية بسلام وبلا خوف.</p>
+                                <a href="https://www.msf.org" target="_blank" rel="noopener noreferrer" class="text-xs text-indigo-600 hover:text-indigo-800 font-bold inline-flex items-center gap-1">
+                                    <span data-i18n="res-msf-btn">أطباء بلا حدود (دعم إنساني طبي)</span>
+                                    <i data-lucide="external-link" class="w-3 h-3"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم قصص النجاح المحفزة لزرع الأمل والتمكين والكرامة -->
+    <section id="success-stories" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <h3 class="text-2xl md:text-3xl font-bold text-brand-olive" data-i18n="stories-section-title">قصص إرادة كافحت ونجحت</h3>
+            <p class="text-gray-500 mt-2 text-sm" data-i18n="stories-section-desc">قصص حقيقية لمهاجرين تغلبوا على العقبات القانونية والعملية وبنوا حياة مهنية رائدة بشرف واعتزاز.</p>
+        </div>
+
+        <div id="stories-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- سيتم تعبئتها ديناميكياً لتناسب لغة العرض النشطة -->
+        </div>
+    </section>
+
+    <!-- واجهة مساعد الذكاء الاصطناعي التفاعلي الآمن (Floating Widget) -->
+    <div id="chat-widget-container" class="fixed bottom-6 left-6 z-50 flex flex-col items-end">
+        <!-- نافذة المحادثة -->
+        <div id="chat-window" class="hidden w-[360px] sm:w-[400px] h-[500px] bg-white rounded-2xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden mb-4 transition-all duration-300">
+            <!-- الهيدر -->
+            <div class="bg-brand-olive text-white p-4 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                        <i data-lucide="bot" class="w-5 h-5 text-brand-sky"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm" data-i18n="chat-header-title">المساعد الذكي الآمن</h4>
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
+                            <span class="text-[10px] text-brand-sky" data-i18n="chat-status">نشط الآن • مجهول بالكامل</span>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="toggleChat()" class="text-white hover:text-brand-sky transition duration-150">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- الرسائل -->
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 bg-brand-beige">
+                <div class="flex items-start gap-2 max-w-[85%]">
+                    <div class="w-7 h-7 rounded-lg bg-brand-sky text-brand-olive flex items-center justify-center flex-shrink-0 text-xs">
+                        <i data-lucide="bot" class="w-4 h-4"></i>
+                    </div>
+                    <div class="bg-white p-3 rounded-2xl rounded-tr-none shadow-sm text-xs leading-relaxed text-gray-700">
+                        <p data-i18n="chat-welcome">مرحباً بك! أنا مساعدك الآمن لمكافحة بطالة المهاجرين. كيف يمكنني إرشادك اليوم للعثور على عمل، تعلم لغات مجاناً، أو الحصول على دعم قانوني؟ لا تتردد بالاستفسار، محادثتنا مشفرة وسرية تماماً.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- رقاقات التوجيه السريعة (Suggested Chips) -->
+            <div class="px-4 py-2 border-t border-gray-100 bg-white flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
+                <button onclick="sendQuickQuery('chip-1')" class="text-[11px] bg-brand-oliveLight hover:bg-brand-sky text-brand-olive px-2.5 py-1 rounded-full border border-gray-200 transition duration-150" data-i18n="chip-1">كيف أسجل بالمنصة؟</button>
+                <button onclick="sendQuickQuery('chip-2')" class="text-[11px] bg-brand-oliveLight hover:bg-brand-sky text-brand-olive px-2.5 py-1 rounded-full border border-gray-200 transition duration-150" data-i18n="chip-2">أين أجد استشارة قانونية؟</button>
+                <button onclick="sendQuickQuery('chip-3')" class="text-[11px] bg-brand-oliveLight hover:bg-brand-sky text-brand-olive px-2.5 py-1 rounded-full border border-gray-200 transition duration-150" data-i18n="chip-3">كيف أتعلم اللغة مجاناً؟</button>
+            </div>
+
+            <!-- شريط المدخلات والإدخال -->
+            <div class="p-3 bg-white border-t border-gray-100 flex items-center gap-2">
+                <input type="text" id="chat-input" onkeypress="handleChatKeyPress(event)" placeholder="اكتب استفسارك هنا..." class="flex-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-brand-olive focus:bg-white transition duration-150">
+                <button onclick="sendMessage()" class="w-8 h-8 bg-brand-olive hover:bg-opacity-95 text-white rounded-xl flex items-center justify-center transition duration-150">
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <!-- إشعار الخصوصية الصغير أسفل المحادثة -->
+            <div class="bg-gray-50 py-1.5 px-3 text-center border-t border-gray-100">
+                <p class="text-[9px] text-gray-400" data-i18n="chat-privacy-note">تنبيه: محادثاتك مع المساعد مشفرة ولا يتم تخزين أي بيانات للتعرف على الهوية.</p>
+            </div>
+        </div>
+
+        <!-- زر المساعد العائم -->
+        <button onclick="toggleChat()" class="bg-brand-olive hover:bg-brand-accent text-white p-4 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-105 group relative">
+            <div class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border-2 border-white"></div>
+            <i data-lucide="bot" class="w-6 h-6"></i>
+            <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-out font-bold text-xs mr-2 whitespace-nowrap" data-i18n="chat-toggle">مساعد الذكاء الاصطناعي</span>
+        </button>
+    </div>
+
+    <!-- الفوتر والتذييل مع الرسالة الحقوقية السامية -->
+    <footer class="bg-brand-olive text-white mt-auto pt-12 pb-6 border-t-4 border-brand-accent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-8 mb-12">
+            
+            <!-- معلومات المنصة -->
+            <div class="md:col-span-5 space-y-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white text-brand-olive rounded-xl flex items-center justify-center shadow-md">
+                        <i data-lucide="hand-helping" class="w-5 h-5"></i>
+                    </div>
+                    <h4 class="text-lg font-bold" data-i18n="footer-brand-title">منصة فرصة جديدة</h4>
+                </div>
+                <p class="text-gray-300 text-xs sm:text-sm leading-relaxed" data-i18n="footer-brand-desc">
+                    مبادرة اجتماعية إنسانية مستقلة، تأسست بالتعاون مع نقابات عمالية وهيئات حقوقية مستقلة بهدف محاربة بطالة المهاجرين ودعم اندماجهم المهني والاجتماعي بعيداً عن أية ملاحقات أو قيود أمنية ظالمة.
+                </p>
+                <div class="flex items-center gap-2 text-xs text-brand-sky font-semibold">
+                    <i data-lucide="shield-alert" class="w-4 h-4 flex-shrink-0"></i>
+                    <span data-i18n="footer-brand-badge">مشروع تضامني إنساني بحت</span>
+                </div>
+            </div>
+
+            <!-- روابط سريعة ومفيدة -->
+            <div class="md:col-span-3 space-y-3">
+                <h5 class="font-bold text-sm text-brand-sky" data-i18n="footer-links-title">روابط تهمك</h5>
+                <ul class="space-y-2 text-xs sm:text-sm text-gray-300">
+                    <li><a href="#jobs-section" class="hover:text-white transition duration-150" data-i18n="nav-jobs">البحث عن فرص عمل آمنة</a></li>
+                    <li><a href="#register-hub" class="hover:text-white transition duration-150" data-i18n="nav-register">تسجيل بيانات المهارات</a></li>
+                    <li><a href="#resources-section" class="hover:text-white transition duration-150" data-i18n="nav-resources">مصادر التعلم المجاني</a></li>
+                    <li><a href="#success-stories" class="hover:text-white transition duration-150" data-i18n="nav-stories">اقرأ تجارب وقصص نجاح</a></li>
+                </ul>
+            </div>
+
+            <!-- صندوق الشراكة والتعاون -->
+            <div class="md:col-span-4 space-y-4">
+                <h5 class="font-bold text-sm text-brand-sky" data-i18n="footer-employer-title">هل أنت صاحب عمل تود المساعدة؟</h5>
+                <p class="text-xs text-gray-300 leading-relaxed" data-i18n="footer-employer-desc">
+                    نرحب بالشركات وأصحاب الورش الذين يؤمنون بكرامة الإنسان وحقه بالعمل الشريف دون عوائق تعجيزية. تواصل معنا لتسجيل منشأتك كشريك تضامني موثوق.
+                </p>
+                <button onclick="openEmployerModal()" class="w-full bg-brand-accent hover:bg-opacity-95 text-white font-bold py-2.5 px-4 rounded-xl text-xs sm:text-sm transition duration-200 shadow flex items-center justify-center gap-2">
+                    <i data-lucide="building" class="w-4 h-4 flex-shrink-0"></i>
+                    <span data-i18n="footer-employer-btn">سجل منشأتك كشريك متضامن</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- تذييل الفوتر والرسالة الإنسانية السامية المطلوبة -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 border-t border-white border-opacity-10 text-center">
+            <div class="bg-white bg-opacity-5 py-3 px-6 rounded-2xl inline-block max-w-xl mx-auto mb-4 border border-white border-opacity-10">
+                <p class="text-sm md:text-base font-semibold text-brand-sky tracking-wider" data-i18n="footer-dignity-quote">
+                    "الكرامة الإنسانية فوق كل اعتبار، والعمل الشريف حق طبيعي لكل إنسان."
+                </p>
+            </div>
+            <p class="text-xs text-gray-400 mt-2">
+                <span data-i18n="footer-copyright">&copy; 2026 منصة فرصة جديدة. كافة الحقوق محفوظة ومتاحة لدعم الفئات المستضعفة مجاناً.</span>
+            </p>
+        </div>
+    </footer>
+
+    <!-- جافا سكريبت متكامل للترجمة، الفلترة، المساعد الذكي وحفظ البيانات والتحميل المطور -->
+    <script>
+        const apiKey = ""; 
+
+        // تعريف اللغات المتاحة مع كافة سلاسل الترجمة
+        const translations = {
+            ar: {
+                "logo-title": "فرصة جديدة",
+                "logo-subtitle": "معاً للكرامة والعمل",
+                "nav-jobs": "فرص العمل المتاحة",
+                "nav-register": "مركز التسجيل والمشاركة",
+                "nav-resources": "الموارد والتدريب",
+                "nav-stories": "قصص نجاح",
+                "btn-help": "مساعدة قانونية وفورية",
+                "hero-security-alert": "بياناتك في أمان تام بنسبة 100% ولا تُشارك مع أي سلطة أمنية",
+                "hero-title": "الكرامة الإنسانية تبدأ بفرصة عمل عادلة ومستقرة.",
+                "hero-desc": "نحن نؤمن بأن المهارات لا تحتاج إلى أوراق معقدة لتثبت جدارتها. نربطك مباشرة مع أصحاب عمل محليين وشركات متضامنة مستعدة لتوظيفك ودعمك لتوثيق أوضاعك القانونية بسلام وأمان.",
+                "hero-btn-browse": "تصفح الوظائف الآن",
+                "hero-btn-register": "مركز التسجيل والمشاركة",
+                "stats-title": "الهدف الأساسي للمنصة",
+                "stats-desc": "تمكين العمالة المهاجرة عبر التدريب المجاني، الاستشارات القانونية الآمنة، والتوظيف المباشر دون تعقيدات ورقية تعجيزية.",
+                "stats-jobs": "فرصة نشطة",
+                "stats-security": "سرية وأمان",
+                "stats-partners": "شريك متعاون",
+                "firewall-title": "مبدأ عدم الإبلاغ (Firewall Policy):",
+                "firewall-desc": "نحن ملتزمون بعدم ربط الخدمات الاجتماعية والمهنية بأجهزة إنفاذ القانون وقوانين الهجرة. تصفحك آمن تماماً هنا.",
+                "services-title": "خدماتنا الركيزة لتمكين المهاجرين",
+                "services-subtitle": "نوفر الدعم الشامل والموجه في شتى المجالات الحياتية والمهنية مجاناً وبلا قيود.",
+                "card1-title": "أكاديميات وتدريب مهني مجاني",
+                "card1-desc": "برامج تدريبية تهدف لبناء المهارات التقنية والحرفية مجاناً عبر منصات رائدة محلياً وإقليمياً لمساعدتك على بدء العمل الحر وتأمين مصدر دخل.",
+                "card1-link": "استكشف المنصات التعليمية",
+                "card2-title": "استشارات قانونية ودعم حقوقي",
+                "card2-desc": "توفير توجيه مجاني لمعرفة إجراءات الحصول على إقامة عمل قانونية، وفهم آليات تسوية الأوضاع بالتعاون مع المنظمات الموثوقة والجمعيات الحقوقية الدولية.",
+                "card2-link": "تعرّف على شركائنا القانونيين",
+                "card3-title": "قصص نجاح من الواقع",
+                "card3-desc": "تجارب وقصص ملهمة من أشخاص استطاعوا تأسيس مشاريعهم وتحقيق طموحهم بمساعدة الاندماج الاجتماعي والتدريب وتسهيل المسارات المهنية بسلام.",
+                "card3-link": "اقرأ قصص النجاح",
+                "jobs-section-title": "فرص العمل المتاحة من شركاء متضامنين",
+                "jobs-section-desc": "هذه الشركات تدعم الكرامة الإنسانية، وتتفهم الوضع الخاص للعمال وتوفر دعماً فورياً للاندماج وتوثيق الأوراق بمرونة عالية.",
+                "jobs-live-update": "تحديث مستمر: تم إضافة 5 وظائف اليوم",
+                "search-label-skill": "ابحث عن مهارة أو تخصص",
+                "search-placeholder-skill": "مثال: بناء، صيانة، طبخ...",
+                "search-label-city": "المدينة أو الموقع",
+                "search-label-type": "نوع الدوام",
+                "no-jobs-title": "عذراً، لم نجد وظائف مطابقة للبحث",
+                "no-jobs-desc": "حاول تعديل كلمات البحث أو تصفية المدن للحصول على نتائج أفضل.",
+                
+                /* هيدر ومحتويات مركز التسجيل الجديد */
+                "hub-title": "مركز التسجيل والمشاركة الآمنة",
+                "hub-subtitle": "اختر المسار الذي يناسبك، وسجل معنا بسرية وأمان تام بضمانة خيارات التسجيل السريع.",
+                "tab-seeker-btn": "الباحثين عن عمل",
+                "tab-learning-btn": "التسجيل للتدريب",
+                "tab-volunteer-btn": "التسجيل للتطوع",
+                "auth-section-title": "خيارات التسجيل السريع والربط المباشر (اختياري)",
+                "auth-section-subtitle": "اختر أحد حساباتك الموثوقة للمزامنة الفورية بلمسة واحدة دون تفاصيل يدوية معقدة.",
+                "auth-btn-phone": "رقم الهاتف",
+                "auth-btn-email": "الإيميل",
+
+                /* حقول نموذج التسجيل */
+                "form-title": "معلومات الباحث عن عمل",
+                "form-subtitle": "املأ الحقول التالية لنقوم بترشيحك لأصحاب العمل المتضامنين معنا.",
+                "form-label-name": "الاسم (أو الاسم المستعار الذي تفضله) *",
+                "form-placeholder-name": "مثال: أحمد عبد الله",
+                "form-label-city": "المدينة المتواجد بها حالياً *",
+                "form-label-phone": "رقم هاتف للتواصل (أو حساب تيليجرام/واتساب) *",
+                "form-placeholder-phone": "مثال: 00212XXXXXXXX",
+                "form-label-skills": "أبرز المهارات والحرف التي تتقنها *",
+                "form-placeholder-skills": "مثال: سباكة، كهرباء، أعمال بناء، ترجمة...",
+                "form-label-resume": "تحميل السيرة الذاتية (اختياري)",
+                "resume-drag-text": "اسحب وأفلت ملف السيرة الذاتية هنا أو اضغط للتصفح",
+                "resume-success-msg": "✓ تم رفع السيرة الذاتية وربطها بنجاح!",
+                "form-label-experience": "نبذة مختصرة عن خبراتك أو متطلباتك الخاصة (اختياري)",
+                "form-placeholder-experience": "اكتب هنا أي تفاصيل إضافية تود إخبارنا بها...",
+                "form-security-disclaimer": "<strong>تعهد الأمان التام:</strong> نلتزم بأن معلومات الاتصال والبيانات المقدمة هنا لن يتم نشرها علناً، ولن تُعرض إلا لأصحاب العمل الذين تم التحقق من هوياتهم وسجلهم الإنساني والأخلاقي بشكل مستقل وصارم من قبل لجنتنا القانونية.",
+                "form-checkbox-label": "أوافق على الشروط وأؤكد رغبتي في مطابقة مهاراتي مع فرص العمل الآمنة المتوفرة.",
+                "form-btn-submit": "إرسال معلوماتي بأمان وتلقي العروض",
+
+                /* حقول تبويب التدريب */
+                "learning-panel-title": "طلب الانضمام إلى الكورسات والدورات المجانية",
+                "learning-panel-subtitle": "سجل اهتمامك لإدراج اسمك في ورش العمل والتدريب المهني ولغات الاندماج مجاناً.",
+                "form-label-course": "اختر الدورة التدريبية المطلوبة *",
+                "learning-opt-placeholder": "اختر المسار الأكاديمي",
+                "learning-opt-1": "السباكة والكهرباء والشبكات المنزلية",
+                "learning-opt-2": "برمجة الويب وتطبيقات الكمبيوتر",
+                "learning-opt-3": "تعلم لغات الاندماج السريع (الفرنسية/الإنجليزية)",
+                "learning-opt-4": "إدارة المشاريع الحرفية والطهي الاحترافي",
+                "form-label-goal": "الهدف المرجو من التدريب *",
+                "learning-btn-submit": "تسجيل اهتمامي والبدء في الدراسة",
+
+                /* حقول تبويب التطوع */
+                "volunteer-panel-title": "طلب الانضمام كشريك متطوع ومساند",
+                "volunteer-panel-subtitle": "انضم إلينا كطبيب، محام، مترجم، أو داعم لوجستي لمساندة قضايا الكرامة الإنسانية.",
+                "form-label-volunteer-role": "مجال التطوع المفضل *",
+                "volunteer-opt-placeholder": "اختر المجال",
+                "volunteer-opt-1": "دعم قانوني واستشارات توثيقية",
+                "volunteer-opt-2": "تدريس لغات وبناء مهارات فنية",
+                "volunteer-opt-3": "دعم معنوي، تسويق، أو مرافقة لوجستية",
+                "volunteer-opt-4": "رعاية طبية وإسعافات صحية",
+                "form-label-hours": "عدد ساعات التطوع المتاحة أسبوعياً *",
+                "volunteer-btn-submit": "تأكيد التسجيل كمتطوع",
+
+                /* الموارد والفوتر والقصص */
+                "resources-section-title": "دليلك الكامل للموارد والتمكين المجاني (روابط حقيقية)",
+                "resources-section-subtitle": "انقر فوق الروابط الموضحة في الأسفل للوصول المباشر إلى المنصات ومصادر التعلم والمنظمات التضامنية الشريكة بشكل آمن.",
+                "res-col1-title": "منصات تعليمية ودورات",
+                "res-col1-badge1": "منصة عربية رائدة",
+                "res-col1-card1-title": "مؤسسة إدراك للتعليم المفتوح",
+                "res-col1-card1-desc": "دورات ومساقات عربية مجانية بالكامل لتعلم مهارات الكمبيوتر، ريادة الأعمال، وصيانة الأجهزة والمبيعات.",
+                "res-visit-btn": "زيارة المنصة الرسمية لـ إدراك",
+                "res-col1-badge2": "تعليم عالمي",
+                "res-col1-card2-title": "منصة كورسيرا (Coursera)",
+                "res-col1-card2-desc": "آلاف المساقات التعليمية والدورات المهنية والتقنية المجانية بالتعاون مع أرقى الجامعات العالمية.",
+                "res-browse-btn": "تصفح دورات Coursera",
+                "res-col2-title": "تعلم اللغات الحية للاندماج",
+                "res-col2-badge1": "تطبيق مجاني",
+                "res-col2-card1-title": "تطبيق دولينجو (Duolingo)",
+                "res-col2-card1-desc": "أفضل تطبيق مجاني لتعلم اللغات المحلية (الإنجليزية، الفرنسية، الإسبانية) بأسلوب تفاعلي ممتع وبسيط.",
+                "res-learn-btn": "بدء التعلم على Duolingo",
+                "res-col2-badge2": "تعليم تفاعلي",
+                "res-col2-card2-title": "قنوات بي بي سي التعليمية",
+                "res-col2-card2-desc": "تجميعة لمصادر وقنوات ومواقع تفاعلية لتطوير المحادثة وتجاوز حواجز الخجل للتخاطب بطلاقة.",
+                "res-channels-btn": "قنوات BBC لتعليم الإنجليزية",
+                "res-col3-title": "منظمات حقوقية وإنسانية",
+                "res-col3-badge1": "استشارة وحماية قانونية",
+                "res-col3-card1-title": "المفوضية السامية لشؤون اللاجئين",
+                "res-col3-card1-desc": "القسم المخصص لتوفير الحماية القانونية، الإرشاد الإنساني، وتوجيه المهاجرين قانونياً وتسهيل المعاملات الرسمية.",
+                "res-unhcr-btn": "الموقع الرسمي لـ UNHCR Help",
+                "res-col3-badge2": "منظمة غير حكومية",
+                "res-col3-card2-title": "أطباء بلا حدود (MSF)",
+                "res-col3-card2-desc": "منظمات عالمية تقدم دعماً لوجستياً، ورعاية طبية ونفسية، وتوعية بالحقوق والواجبات المهنية بسلام وبلا خوف.",
+                "res-msf-btn": "أطباء بلا حدود (دعم إنساني طبي)",
+                "stories-section-title": "قصص إرادة كافحت ونجحت",
+                "stories-section-desc": "قصص حقيقية لمهاجرين تغلبوا على العقبات القانونية والعملية وبنوا حياة مهنية رائدة بشرف واعتزاز.",
+                "footer-brand-title": "منصة فرصة جديدة",
+                "footer-brand-desc": "مبادرة اجتماعية إنسانية مستقلة، تأسست بالتعاون مع نقابات عمالية وهيئات حقوقية مستقلة بهدف محاربة بطالة المهاجرين ودعم اندماجهم المهني والاجتماعي بعيداً عن أية ملاحقات أو قيود أمنية ظالمة.",
+                "footer-brand-badge": "مشروع تضامني إنساني بحت",
+                "footer-links-title": "روابط تهمك",
+                "footer-employer-title": "هل أنت صاحب عمل تود المساعدة؟",
+                "footer-employer-desc": "نرحب بالشركات وأصحاب الورش الذين يؤمنون بكرامة الإنسان وحقه بالعمل الشريف دون عوائق تعجيزية. تواصل معنا لتسجيل منشأتك كشريك تضامني موثوق.",
+                "footer-employer-btn": "سجل منشأتك كشريك متضامن",
+                "footer-dignity-quote": "\"الكرامة الإنسانية فوق كل اعتبار، والعمل الشريف حق طبيعي لكل إنسان.\"",
+                "footer-copyright": "© 2026 منصة فرصة جديدة. كافة الحقوق محفوظة ومتاحة لدعم الفئات المستضعفة مجاناً.",
+                "apply-btn": "التقديم السريع والآمن",
+                "sub-salary": "المستحقات المادية:",
+                "sub-additional": "دعم تضامني إضافي:",
+                "modal-success-title": "تمت العملية بنجاح",
+                "modal-success-btn": "موافق، شكراً لكم",
+                
+                /* ترجمة المساعد الذكي */
+                "chat-toggle": "مساعد الذكاء الاصطناعي",
+                "chat-header-title": "المساعد الذكي الآمن",
+                "chat-status": "نشط الآن • مجهول بالكامل",
+                "chat-welcome": "مرحباً بك! أنا مساعدك الآمن لمكافحة بطالة المهاجرين. كيف يمكنني إرشادك اليوم للعثور على عمل، تعلم لغات مجاناً، أو الحصول على دعم قانوني؟ لا تتردد بالاستفسار، محادثتنا مشفرة وسرية تماماً.",
+                "chat-placeholder": "اكتب استفسارك هنا...",
+                "chat-privacy-note": "تنبيه: محادثاتك مع المساعد مشفرة ولا يتم تخزين أي بيانات للتعرف على الهوية.",
+                "chip-1": "كيف أسجل بالمنصة؟",
+                "chip-2": "أين أجد استشارة قانونية؟",
+                "chip-3": "كيف أتعلم اللغة مجاناً؟",
+                "chat-error": "عذراً، حدث خطأ أثناء الاتصال بالشبكة الذكية. يرجى مراجعة اتصالك ومحاولة إرسال رسالتك مرة أخرى."
+            },
+            en: {
+                "logo-title": "New Opportunity",
+                "logo-subtitle": "Together for Dignity and Work",
+                "nav-jobs": "Available Jobs",
+                "nav-register": "Registration Hub",
+                "nav-resources": "Resources & Training",
+                "nav-stories": "Success Stories",
+                "btn-help": "Immediate Legal Aid",
+                "hero-security-alert": "Your data is 100% safe and will never be shared with immigration authorities",
+                "hero-title": "Human dignity starts with a fair and stable job opportunity.",
+                "hero-desc": "We believe that skills do not need complex papers to prove their worth. We connect you directly with local employers and solidarity companies ready to hire and support you to document your legal status safely.",
+                "hero-btn-browse": "Browse Jobs Now",
+                "hero-btn-register": "Open Registration Hub",
+                "stats-title": "The Core Platform Goal",
+                "stats-desc": "Empowering migrant labor through free vocational training, safe legal consultation, and direct employment without paper barriers.",
+                "stats-jobs": "Active Jobs",
+                "stats-security": "Confidential & Safe",
+                "stats-partners": "Collaborative Partners",
+                "firewall-title": "Non-Reporting Principle (Firewall Policy):",
+                "firewall-desc": "We are committed to completely separating social/labor services from immigration enforcement. Your browsing here is secure.",
+                "services-title": "Our Key Empowerment Services",
+                "services-subtitle": "We provide comprehensive, tailored support across various educational and legal sectors for free.",
+                "card1-title": "Free Vocational Training",
+                "card1-desc": "Programs aimed at building practical technical skills for free through leading regional platforms to help you start freelancing and secure income.",
+                "card1-link": "Explore Training Platforms",
+                "card2-title": "Legal Guidance & Advocacy",
+                "card2-desc": "Providing free guidance on procedures to obtain legal work permits and understand status regularisation with international rights bodies.",
+                "card2-link": "Meet Legal Partners",
+                "card3-title": "Real-world Success Stories",
+                "card3-desc": "Inspiring stories of individuals who established their small projects and achieved their ambitions via social integration and training.",
+                "card3-link": "Read Success Stories",
+                "jobs-section-title": "Available Jobs from Solidarity Partners",
+                "jobs-section-desc": "These companies support human dignity, understand the special circumstances of workers, and offer flexible support for documentation.",
+                "jobs-live-update": "Live Update: 5 new jobs added today",
+                "search-label-skill": "Search by Skill or Specialty",
+                "search-placeholder-skill": "e.g., building, maintenance, cooking...",
+                "search-label-city": "City or Location",
+                "search-label-type": "Job Type",
+                "no-jobs-title": "Sorry, no matching jobs found",
+                "no-jobs-desc": "Try modifying your search keywords or location filters for better results.",
+                
+                /* Hub Translations */
+                "hub-title": "Secure Registration & Participation Hub",
+                "hub-subtitle": "Choose the path that fits you and register securely with multi-login options.",
+                "tab-seeker-btn": "Job Seekers",
+                "tab-learning-btn": "Register for Training",
+                "tab-volunteer-btn": "Register to Volunteer",
+                "auth-section-title": "Quick Registration & Sync options (Optional)",
+                "auth-section-subtitle": "Select a trusted social account to instantly populate credentials with full privacy.",
+                "auth-btn-phone": "Phone Number",
+                "auth-btn-email": "E-mail",
+
+                /* Seeker Form */
+                "form-title": "Job Seeker Information",
+                "form-subtitle": "Fill in the fields below so we can matching your skills with safe employers.",
+                "form-label-name": "Name (or preferred pseudonym) *",
+                "form-placeholder-name": "e.g., Alex Johnson",
+                "form-label-city": "Current Residing City *",
+                "form-label-phone": "Contact Number (WhatsApp/Telegram) *",
+                "form-placeholder-phone": "e.g., 00212XXXXXXXX",
+                "form-label-skills": "Key Skills or Handcrafts *",
+                "form-placeholder-skills": "e.g., Plumbing, Electricity, Carpentry...",
+                "form-label-resume": "Upload Resume (Optional)",
+                "resume-drag-text": "Drag and drop your resume file here or click to browse",
+                "resume-success-msg": "✓ Resume uploaded and linked successfully!",
+                "form-label-experience": "Brief summary of experiences or special needs (Optional)",
+                "form-placeholder-experience": "Type any extra details you want to share...",
+                "form-security-disclaimer": "<strong>Safety Guarantee:</strong> We promise that contact details and submitted data will never be published publicly. They are exclusively revealed to verified, human-centered employers checked by our legal committee.",
+                "form-checkbox-label": "I agree to the terms and wish to match my skills with safe job opportunities.",
+                "form-btn-submit": "Submit Information Securely",
+
+                /* Training Form */
+                "learning-panel-title": "Apply for Free Courses & Training",
+                "learning-panel-subtitle": "Register your interest to join free vocational workshops and inclusion language courses.",
+                "form-label-course": "Select Requested Course *",
+                "learning-opt-placeholder": "Select Academic Track",
+                "learning-opt-1": "Plumbing, Electricity, and Home Networks",
+                "learning-opt-2": "Web Development & Computer Applications",
+                "learning-opt-3": "Inclusion Languages (French / English)",
+                "learning-opt-4": "Small Business Management & Professional Cooking",
+                "form-label-goal": "Desired Goal from the Course *",
+                "learning-btn-submit": "Register Interest & Start Learning",
+
+                /* Volunteer Form */
+                "volunteer-panel-title": "Register as a Supportive Volunteer Partner",
+                "volunteer-panel-subtitle": "Join as a lawyer, translator, doctor, or logistic supporter to uphold human dignity.",
+                "form-label-volunteer-role": "Preferred Volunteering Area *",
+                "volunteer-opt-placeholder": "Select Area",
+                "volunteer-opt-1": "Legal Aid & Documentations",
+                "volunteer-opt-2": "Teaching Languages & Vocational Skills",
+                "volunteer-opt-3": "Moral support, marketing, or logistics",
+                "volunteer-opt-4": "Medical & Health Care",
+                "form-label-hours": "Available Volunteering Hours Weekly *",
+                "volunteer-btn-submit": "Confirm Volunteer Registration",
+
+                "resources-section-title": "Your Guide to Free Resources (Real Links)",
+                "resources-section-subtitle": "Click on the verified links below to access educational platforms and rights organizations safely.",
+                "res-col1-title": "Educational & Course Platforms",
+                "res-col1-badge1": "Leading Arab Platform",
+                "res-col1-card1-title": "Edraak Free Arab Learning",
+                "res-col1-card1-desc": "Completely free Arabic courses to learn computer skills, entrepreneurship, appliance maintenance, and sales.",
+                "res-visit-btn": "Visit Edraak Platform",
+                "res-col1-badge2": "Global Learning",
+                "res-col1-card2-title": "Coursera Online",
+                "res-col1-card2-desc": "Thousands of professional vocational courses and technical degrees for free in partnership with elite global universities.",
+                "res-browse-btn": "Browse Coursera Courses",
+                "res-col2-title": "Languages for Social Inclusion",
+                "res-col2-badge1": "Free App",
+                "res-col2-card1-title": "Duolingo App",
+                "res-col2-card1-desc": "The best free application to learn local languages (English, French, Spanish) via gamified interactive steps.",
+                "res-learn-btn": "Start Learning on Duolingo",
+                "res-col2-badge2": "Interactive Practice",
+                "res-col2-card2-title": "BBC Learning English",
+                "res-col2-card2-desc": "A collection of interactive media, channels, and worksheets to practice conversation and break linguistic barriers.",
+                "res-channels-btn": "Access BBC Channels",
+                "res-col3-title": "NGOs & Humanitarian Aid",
+                "res-col3-badge1": "Legal Aid & Shelter",
+                "res-col3-card1-title": "UNHCR Refugee Support",
+                "res-col3-card1-desc": "The dedicated section for providing safe rights counseling, protection advice, and status documentation guidance.",
+                "res-unhcr-btn": "Visit UNHCR Help Portal",
+                "res-col3-badge2": "Global NGO",
+                "res-col3-card2-title": "Doctors Without Borders (MSF)",
+                "res-col3-card2-desc": "Global organization offering safe logistic, medical, and mental health aid, along with labor rights awareness in full safety.",
+                "res-msf-btn": "Access MSF Medical Portal",
+                "stories-section-title": "Stories of Will and Success",
+                "stories-section-desc": "Real stories of migrants who overcame legal and practical obstacles, building thriving careers with dignity.",
+                "footer-brand-title": "New Opportunity Platform",
+                "footer-brand-desc": "An independent social initiative, established in coordination with independent trade unions and rights bodies to combat migrant unemployment and support safe integration.",
+                "footer-brand-badge": "A Purely Humanitarian Project",
+                "footer-links-title": "Useful Links",
+                "footer-employer-title": "Are you an Employer wanting to help?",
+                "footer-employer-desc": "We welcome workshop owners and companies who believe in human dignity and the right to work without barriers. Register with us as a solidary employer.",
+                "footer-employer-btn": "Register Your Facility",
+                "footer-dignity-quote": "\"Human dignity is above all else, and honest work is a natural right for every human being.\"",
+                "footer-copyright": "© 2026 New Opportunity. All rights reserved and freely available for vulnerable groups.",
+                "apply-btn": "Fast & Secure Application",
+                "sub-salary": "Salary/Compensation:",
+                "sub-additional": "Solidarity Support:",
+                "modal-success-title": "Success",
+                "modal-success-btn": "Got it, thank you",
+                
+                /* Chat AI Translations */
+                "chat-toggle": "AI Assistant",
+                "chat-header-title": "Secure AI Assistant",
+                "chat-status": "Active Now • Fully Anonymous",
+                "chat-welcome": "Hello! I am your secure assistant. How can I guide you today to find work, learn languages for free, or get legal support? Feel free to ask, our chat is encrypted and entirely private.",
+                "chat-placeholder": "Type your inquiry here...",
+                "chat-privacy-note": "Privacy: Your chats with the assistant are encrypted. No identity-tracking data is stored.",
+                "chip-1": "How to register?",
+                "chip-2": "Where to find legal aid?",
+                "chip-3": "How to learn languages free?",
+                "chat-error": "Sorry, an issue occurred connecting to the smart network. Please verify your connection and try sending your message again."
+            },
+            fr: {
+                "logo-title": "Nouvelle Opportunité",
+                "logo-subtitle": "Ensemble pour la Dignité et l'Emploi",
+                "nav-jobs": "Emplois Disponibles",
+                "nav-register": "Espace Enregistrement",
+                "nav-resources": "Ressources & Formations",
+                "nav-stories": "Histoires de Réussite",
+                "btn-help": "Aide Juridique Immédiate",
+                "hero-security-alert": "Vos données sont 100% sécurisées et ne seront jamais partagées avec les autorités d'immigration",
+                "hero-title": "La dignité humaine commence par un emploi équitable et stable.",
+                "hero-desc": "Nous croyons que les compétences n'ont pas besoin de papiers complexes pour prouver leur valeur. Nous vous mettons directement en relation avec des employeurs locaux et des entreprises solidaires prêts à vous embaucher et à vous aider à régulariser votre statut.",
+                "hero-btn-browse": "Parcourir les Emplois",
+                "hero-btn-register": "Ouvrir l'Espace d'Enregistrement",
+                "stats-title": "Objectif Central de la Plateforme",
+                "stats-desc": "Autonomiser la main-d'œuvre migrante grâce à des formations professionnelles gratuites, des conseils juridiques sûrs et un emploi direct.",
+                "stats-jobs": "Offres Actives",
+                "stats-security": "Sécurité Totale",
+                "stats-partners": "Partenaires Solidaires",
+                "firewall-title": "Principe de Non-Dénonciation (Politique Firewall):",
+                "firewall-desc": "Nous nous engageons à séparer strictement les services sociaux et professionnels des contrôles de l'immigration. Votre navigation ici est sûre.",
+                "services-title": "Nos Services Essentiels",
+                "services-subtitle": "Nous fournissons un soutien complet, personnalisé et gratuit dans divers secteurs éducatifs et juridiques.",
+                "card1-title": "Formation Professionnelle Gratuite",
+                "card1-desc": "Programmes visant à acquérir des compétences techniques pratiques gratuitement via des plateformes régionales de premier plan pour vous aider à vous lancer.",
+                "card1-link": "Explorer les Formations",
+                "card2-title": "Conseils Juridiques & Droits",
+                "card2-desc": "Orientation gratuite sur les procédures d'obtention de permis de travail légaux et de régularisation du statut avec des organismes de défense des droits.",
+                "card2-link": "Découvrir les Partenaires",
+                "card3-title": "Histoires de Réussite Réelles",
+                "card3-desc": "Récits inspirants de personnes ayant surmonté les obstacles pour créer des micro-projets ou s'intégrer sereinement dans le marché du travail.",
+                "card3-link": "Lire les Témoignages",
+                "jobs-section-title": "Emplois Proposés par des Entreprises Solidaires",
+                "jobs-section-desc": "Ces entreprises soutiennent la dignité humaine, comprennent la situation des travailleurs et offrent un accompagnement flexible pour la régularisation.",
+                "jobs-live-update": "Mise à jour: 5 nouvelles offres d'emploi aujourd'hui",
+                "search-label-skill": "Rechercher par Compétence",
+                "search-placeholder-skill": "ex: maçonnerie, électricité, cuisine...",
+                "search-label-city": "Ville ou Région",
+                "search-label-type": "Type de Contrat",
+                "no-jobs-title": "Désolé, aucun emploi correspondant trouvé",
+                "no-jobs-desc": "Essayez de modifier vos mots-clés ou filtres de localisation pour obtenir de meilleurs résultats.",
+                
+                /* Hub Translations */
+                "hub-title": "Espace d'Enregistrement Sécurisé",
+                "hub-subtitle": "Choisissez votre parcours et enregistrez-vous via nos options de connexion multiples.",
+                "tab-seeker-btn": "Demandeurs d'Emploi",
+                "tab-learning-btn": "Inscription aux Formations",
+                "tab-volunteer-btn": "Inscription Bénévolat",
+                "auth-section-title": "Options de Connexion Rapide (Optionnel)",
+                "auth-section-subtitle": "Sélectionnez un compte pour pré-remplir instantanément vos identifiants en toute confidentialité.",
+                "auth-btn-phone": "Téléphone",
+                "auth-btn-email": "E-mail",
+
+                /* Seeker Form */
+                "form-title": "Informations du Candidat",
+                "form-subtitle": "Remplissez les champs ci-dessous pour faire correspondre vos compétences avec des employeurs de confiance.",
+                "form-label-name": "Nom (ou pseudonyme préféré) *",
+                "form-placeholder-name": "ex: Jean Dupont",
+                "form-label-city": "Ville de Résidence Actuelle *",
+                "form-label-phone": "Numéro de Contact (WhatsApp/Telegram) *",
+                "form-placeholder-phone": "ex: 00212XXXXXXXX",
+                "form-label-skills": "Compétences clés / Métiers *",
+                "form-placeholder-skills": "ex: Plomberie, électricité, maçonnerie...",
+                "form-label-resume": "Télécharger le CV (Optionnel)",
+                "resume-drag-text": "Glissez-déposez votre CV ici ou cliquez pour parcourir",
+                "resume-success-msg": "✓ CV téléchargé et relié avec succès !",
+                "form-label-experience": "Bref aperçu des expériences ou besoins spécifiques (Optionnel)",
+                "form-placeholder-experience": "Écrivez ici tout détail supplémentaire que vous souhaitez partager...",
+                "form-security-disclaimer": "<strong>Garantie de Sécurité:</strong> Vos coordonnées ne seront jamais publiées. Elles sont révélées exclusivement aux employeurs solidaires vérifiés par notre comité juridique.",
+                "form-checkbox-label": "J'accepte les conditions et souhaite faire correspondre mes compétences avec des opportunités sûres.",
+                "form-btn-submit": "Envoyer les Informations Sécurisées",
+
+                /* Training Form */
+                "learning-panel-title": "S'inscrire aux Formations Gratuites",
+                "learning-panel-subtitle": "Inscrivez-vous pour rejoindre des ateliers de métiers manuels ou des cours de langues.",
+                "form-label-course": "Sélectionner le Cours *",
+                "learning-opt-placeholder": "Sélectionner la filière",
+                "learning-opt-1": "Plomberie, Électricité et Réseau Maison",
+                "learning-opt-2": "Développement Web & Bureautique",
+                "learning-opt-3": "Langues d'Intégration (Français / Anglais)",
+                "learning-opt-4": "Gestion de Micro-Projets & Cuisine Professionnelle",
+                "form-label-goal": "Objectif Souhaité *",
+                "learning-btn-submit": "Valider mon Inscription au Cours",
+
+                /* Volunteer Form */
+                "volunteer-panel-title": "Devenir Bénévole de Soutien",
+                "volunteer-panel-subtitle": "Rejoignez-nous en tant qu'avocat, traducteur, médecin ou soutien logistique.",
+                "form-label-volunteer-role": "Domaine de Bénévolat Préféré *",
+                "volunteer-opt-placeholder": "Sélectionner le domaine",
+                "volunteer-opt-1": "Conseils Juridiques & Régularisation",
+                "volunteer-opt-2": "Enseignement des Langues & Métiers",
+                "volunteer-opt-3": "Soutien Moral, Marketing ou Logistique",
+                "volunteer-opt-4": "Soutien Médical & Soins de Santé",
+                "form-label-hours": "Heures de Disponibilité Hebdomadaire *",
+                "volunteer-btn-submit": "Confirmer l'Engagement Bénévole",
+
+                "resources-section-title": "Votre Guide des Ressources Gratuites (Liens Réels)",
+                "resources-section-subtitle": "Cliquez sur les liens vérifiés ci-dessous pour accéder en toute sécurité aux plateformes d'apprentissage et aux ONG.",
+                "res-col1-title": "Plateformes de Cours & Formations",
+                "res-col1-badge1": "Plateforme Arabe Clé",
+                "res-col1-card1-title": "Plateforme Edraak",
+                "res-col1-card1-desc": "Cours gratuits en arabe pour acquérir des compétences en informatique, entreprenariat, maintenance d'appareils et commerce.",
+                "res-visit-btn": "Visiter Edraak",
+                "res-col1-badge2": "Cours Internationaux",
+                "res-col1-card2-title": "Coursera en Ligne",
+                "res-col1-card2-desc": "Des milliers de cours professionnels et de compétences techniques gratuitement en partenariat avec des universités d'élite.",
+                "res-browse-btn": "Découvrir Coursera",
+                "res-col2-title": "Langues pour l'Inclusion Sociale",
+                "res-col2-badge1": "App Gratuite",
+                "res-col2-card1-title": "Duolingo App",
+                "res-col2-card1-desc": "La meilleure application gratuite pour apprendre les langues locales (anglais, français, espagnol) de manière interactive.",
+                "res-learn-btn": "Apprendre sur Duolingo",
+                "res-col2-badge2": "Pratique Interactive",
+                "res-col2-card2-title": "BBC Learning English",
+                "res-col2-card2-desc": "Une collection de médias, de canaux et de fiches de travail interactives pour pratiquer la conversation quotidienne.",
+                "res-channels-btn": "Accéder aux chaînes BBC",
+                "res-col3-title": "ONG & Aide Humanitaire",
+                "res-col3-badge1": "Aide Juridique & Protection",
+                "res-col3-card1-title": "Soutien des Réfugiés du HCR",
+                "res-col3-card1-desc": "Section dédiée à la protection juridique, au conseil aux réfugiés et à l'aide à la régularisation du statut.",
+                "res-unhcr-btn": "Visiter le portail d'aide HCR",
+                "res-col3-badge2": "ONG Internationale",
+                "res-col3-card2-title": "Médecins Sans Frontières (MSF)",
+                "res-col3-card2-desc": "Organisation mondiale offrant une aide logistique, médicale et psychologique, ainsi que la sensibilisation aux droits du travail.",
+                "res-msf-btn": "Accéder au portail MSF",
+                "stories-section-title": "Histoires de Volonté et Réussite",
+                "stories-section-desc": "Récits réels de migrants ayant surmonté des défis juridiques et pratiques et réussi à bâtir une vie professionnelle digne.",
+                "footer-brand-title": "Plateforme Nouvelle Opportunité",
+                "footer-brand-desc": "Une initiative sociale et humanitaire indépendante, établie en coordination avec des syndicats et des organismes de défense des droits pour lutter contre le chômage des migrants.",
+                "footer-brand-badge": "Projet Purement Solidaire & Humanitaire",
+                "footer-links-title": "Liens Utiles",
+                "footer-employer-title": "Êtes-vous un employeur voulant aider ?",
+                "footer-employer-desc": "Nous accueillons chaleureusement les entreprises et ateliers qui croient en la dignité humaine et au droit au travail sans barrières.",
+                "footer-employer-btn": "Enregistrer Votre Établissement",
+                "footer-dignity-quote": "\"La dignité humaine est au-dessus de tout, et le travail honnête est un droit naturel pour chaque être humain.\"",
+                "footer-copyright": "© 2026 Nouvelle Opportunité. Tous droits réservés aux groupes vulnérables.",
+                "apply-btn": "Postuler de façon rapide et sûre",
+                "sub-salary": "Indemnités/Salaire:",
+                "sub-additional": "Soutien Solidaire:",
+                "modal-success-title": "Succès",
+                "modal-success-btn": "D'accord, merci",
+                
+                /* Chat AI Translations */
+                "chat-toggle": "Assistant IA",
+                "chat-header-title": "Assistant IA Sécurisé",
+                "chat-status": "Actif • Entièrement Anonyme",
+                "chat-welcome": "Bonjour ! Je suis votre assistant confidentiel. Comment puis-je vous orienter aujourd'hui pour trouver un travail, apprendre des langues ou trouver de l'aide juridique ? Échangeons en toute sécurité.",
+                "chat-placeholder": "Posez votre question...",
+                "chat-privacy-note": "Sécurité : Nos échanges sont cryptés et confidentiels. Aucune donnée d'identité n'est stockée.",
+                "chip-1": "Comment s'inscrire ?",
+                "chip-2": "Où trouver l'aide juridique ?",
+                "chip-3": "Comment apprendre une langue ?",
+                "chat-error": "Désolé, un problème de connexion au réseau intelligent est survenu. Veuillez vérifier votre connexion et renvoyer le message."
+            }
+        };
+
+        const selectOptions = {
+            cities: {
+                ar: [
+                    { value: "", label: "كل المدن" },
+                    { value: "الدار البيضاء", label: "الدار البيضاء" },
+                    { value: "تونس العاصمة", label: "تونس العاصمة" },
+                    { value: "بيروت", label: "بيروت" },
+                    { value: "الرباط", label: "الرباط" },
+                    { value: "طنجة", label: "طنجة" }
+                ],
+                en: [
+                    { value: "", label: "All Cities" },
+                    { value: "الدار البيضاء", label: "Casablanca" },
+                    { value: "تونس العاصمة", label: "Tunis" },
+                    { value: "بيروت", label: "Beirut" },
+                    { value: "الرباط", label: "Rabat" },
+                    { value: "طنجة", label: "Tangier" }
+                ],
+                fr: [
+                    { value: "", label: "Toutes les villes" },
+                    { value: "الدار البيضاء", label: "Casablanca" },
+                    { value: "تونس العاصمة", label: "Tunis" },
+                    { value: "بيروت", label: "Beyrouth" },
+                    { value: "الرباط", label: "Rabat" },
+                    { value: "طنجة", label: "Tanger" }
+                ]
+            },
+            types: {
+                ar: [
+                    { value: "", label: "كل أنواع الدوام" },
+                    { value: "دوام كامل", label: "دوام كامل" },
+                    { value: "يومي / أجر فوري", label: "يومي / أجر فوري" },
+                    { value: "دوام جزئي", label: "دوام جزئي" },
+                    { value: "مرن", label: "مرن" }
+                ],
+                en: [
+                    { value: "", label: "All Job Types" },
+                    { value: "دوام كامل", label: "Full-Time" },
+                    { value: "يومي / أجر فوري", label: "Daily / Cash Pay" },
+                    { value: "دوام جزئي", label: "Part-Time" },
+                    { value: "مرن", label: "Flexible" }
+                ],
+                fr: [
+                    { value: "", label: "Tous les types" },
+                    { value: "دوام كامل", label: "Plein Temps" },
+                    { value: "يومي / أجر فوري", label: "Journalier / Espèces" },
+                    { value: "دوام جزئي", label: "Temps Partiel" },
+                    { value: "مرن", label: "Flexible" }
+                ]
+            }
+        };
+
+        // مصفوفة الوظائف المتاحة
+        const mockJobs = [
+            {
+                id: 1,
+                title: {
+                    ar: "مساعد ديكور وتشطيبات جبسية",
+                    en: "Gypsum & Decorative Finisher Assistant",
+                    fr: "Assistant Plâtrier Décorateur & Finitions"
+                },
+                company: {
+                    ar: "شركة البناء الحديث والتضامن المعماري",
+                    en: "Modern Building & Architectural Solidarity",
+                    fr: "Bâtiment Moderne & Solidarité Architecturale"
+                },
+                city: "الدار البيضاء",
+                skill: "بناء، ديكور، جبس، تشطيبات construction decor gypsum plaster finitions",
+                type: "يومي / أجر فوري",
+                salary: {
+                    ar: "150-200 درهم يومياً",
+                    en: "150-200 MAD Daily",
+                    fr: "150-200 MAD par jour"
+                },
+                description: {
+                    ar: "العمل مع فريق محترف في تشطيب الشقق الفندقية والمنازل. نرحب بكافة الكفاءات ونوفر حماية عمالية ووجبات طعام وتنقّل مجاني.",
+                    en: "Work with a professional finishing apartments and homes. All nationalities are welcome. We provide labor safety, meals, and free transport.",
+                    fr: "Travaillez avec une équipe professionnelle de finition d'appartements. Toutes compétences bienvenues. Repas et transport gratuits fournis."
+                },
+                support: {
+                    ar: "توفير سكن مشترك وتدريب أمني وصحي مجاني داخل الموقع.",
+                    en: "Shared accommodation and free health & safety training on site.",
+                    fr: "Logement partagé et formation de sécurité gratuite sur site."
+                }
+            },
+            {
+                id: 2,
+                title: {
+                    ar: "طاهي / طباخ أكلات شعبية وشرقية",
+                    en: "Traditional & Oriental Cook",
+                    fr: "Chef Cuisinier Plats Traditionnels"
+                },
+                company: {
+                    ar: "مطاعم واحة الضيافة والكرامة",
+                    en: "Dignity Oasis Restaurant Group",
+                    fr: "Groupe Resto L'Oasis de la Dignité"
+                },
+                city: "تونس العاصمة",
+                skill: "طبخ، طهي، مطاعم، تجهيز أغذية cooking cook restaurant food prep cuisine",
+                type: "دوام كامل",
+                salary: {
+                    ar: "700-900 دينار شهرياً",
+                    en: "700-900 TND Monthly",
+                    fr: "700-900 TND par mois"
+                },
+                description: {
+                    ar: "مطلوب طباخ لديه خبرة في الطهي لإعداد الوجبات اليومية. العمل في بيئة مريحة وودية تحترم العمال وكرامتهم.",
+                    en: "Looking for an experienced cook to prepare daily dishes. Work in a friendly and dignified environment respecting all labor rights.",
+                    fr: "Cuisinier expérimenté demandé pour préparer les repas quotidiens. Environnement amical respectant la dignité de chacun."
+                },
+                support: {
+                    ar: "تغطية تأمين صحي خاص ومساعدة قانونية لتسهيل الحصول على إقامة عمل.",
+                    en: "Private health coverage and legal assistance to facilitate work residency.",
+                    fr: "Couverture santé et assistance juridique pour faciliter la résidence."
+                }
+            },
+            {
+                id: 3,
+                title: {
+                    ar: "مساعد لوجستي وتنظيم مستودعات",
+                    en: "Warehouse Assistant & Logistic Coordinator",
+                    fr: "Assistant Logistique & Organisation de Dépôt"
+                },
+                company: {
+                    ar: "مجموعة الأمل للشحن والتعبئة السريعة",
+                    en: "Hope Cargo & Quick Packaging Group",
+                    fr: "Espoir Cargo & Emballage Express"
+                },
+                city: "بيروت",
+                skill: "تنظيم، لوجستيات، مخازن، شحن logistics shipping warehouse management",
+                type: "دوام جزئي",
+                salary: {
+                    ar: "15$ - 20$ لليوم الواحد",
+                    en: "15$ - 20$ per day",
+                    fr: "15$ - 20$ par jour"
+                },
+                description: {
+                    ar: "ترتيب وفحص الشحنات الواردة وتنظيمها داخل المستودعات المركزية. لا يتطلب العمل شهادات رسمية، نركز على الدقة والالتزام والمهارة.",
+                    en: "Organizing and auditing incoming packages inside central depots. No official diplomas needed, we value accuracy and commitment.",
+                    fr: "Tri et audit des expéditions dans des entrepôts centraux. Aucun diplôme formel requis, nous valorisons la précision."
+                },
+                support: {
+                    ar: "أجر يسلم نقداً بنهاية اليوم لحماية خصوصيتك البنكية.",
+                    en: "Wages paid in cash at the end of the shift to secure financial privacy.",
+                    fr: "Salaires payés en espèces en fin de journée pour préserver votre vie privée."
+                }
+            }
+        ];
+
+        // مصفوفة قصص النجاح
+        const successStories = [
+            {
+                avatar: "م. س",
+                name: { ar: "محمد (مهاجر من السودان)", en: "Mohamed (Sudanese Migrant)", fr: "Mohamed (Migrant du Soudan)" },
+                role: { ar: "مطور ويب وتطبيقات حالياً", en: "Now a Web & Mobile Developer", fr: "Actuellement Développeur Web" },
+                desc: {
+                    ar: "وصلت بلا أوراق رسمية وكنت متخوفاً من الذهاب لأي شركة. عبر المنصة تلقيت تدريباً برمجياً مجانياً وتواصلت مع شركة تكنولوجيا داعمة آمنت بقدراتي. اليوم أعمل معهم وتمت تسوية وضعي القانوني بنجاح.",
+                    en: "I arrived without official documents, fearing work search. Through the platform, I received free coding training and met a progressive tech company. Today, I work with them and successfully regularized my papers.",
+                    fr: "Je suis arrivé sans papiers officiels, craignant les recherches. Grâce à la plateforme, j'ai suivi une formation gratuite et rejoint une entreprise solidaire. Aujourd'hui, mon statut est régularisé."
+                },
+                meta: { ar: "الدار البيضاء | سنتين", en: "Casablanca | 2 Years", fr: "Casablanca | 2 ans" }
+            },
+            {
+                avatar: "أ. ف",
+                name: { ar: "أمينة (مهاجرة من الكاميرون)", en: "Amina (Cameroonian Migrant)", fr: "Amina (Migrante du Cameroun)" },
+                role: { ar: "رائدة أعمال في الطهي", en: "Culinary Entrepreneur", fr: "Entrepreneuse Culinaire" },
+                desc: {
+                    ar: "كنت أواجه صعوبات مادية قاسية. بدأت من خلال الحصول على استشارة عمالية وتدريب في إدارة المشاريع الصغيرة. أسست بمساعدة المنصة مشروعاً صغيراً لإعداد الوجبات الشعبية للمطاعم الكبرى.",
+                    en: "I faced severe financial struggles. I began with safe legal advice and basic business management courses here. I managed to establish a thriving food prep service for top restaurants.",
+                    fr: "Je faisais face à de graves difficultés financières. J'ai commencé par des conseils juridiques et des cours de gestion. J'ai fondé un micro-service de préparation culinaire de premier plan."
+                },
+                meta: { ar: "طنجة | سنة ونصف", en: "Tangier | 1.5 Years", fr: "Tanger | 1,5 an" }
+            }
+        ];
+
+        let currentLang = 'ar';
+        let activeTab = 'seeker';
+        let simulatedAuthUser = null;
+
+        // دالة تبديل اللغات
+        function switchLanguage(lang) {
+            currentLang = lang;
+            const htmlEl = document.documentElement;
+            htmlEl.setAttribute('lang', lang);
+            
+            if (lang === 'ar') {
+                htmlEl.setAttribute('dir', 'rtl');
+                document.getElementById('chat-widget-container').className = "fixed bottom-6 left-6 z-50 flex flex-col items-start";
+            } else {
+                htmlEl.setAttribute('dir', 'ltr');
+                document.getElementById('chat-widget-container').className = "fixed bottom-6 right-6 z-50 flex flex-col items-end";
+            }
+
+            const btnAr = document.getElementById('lang-ar');
+            const btnEn = document.getElementById('lang-en');
+            const btnFr = document.getElementById('lang-fr');
+
+            [btnAr, btnEn, btnFr].forEach(btn => {
+                btn.className = "px-2.5 py-1.5 rounded-lg transition duration-150 text-gray-500 hover:text-brand-dark";
+            });
+
+            document.getElementById(`lang-${lang}`).className = "px-2.5 py-1.5 rounded-lg transition duration-150 bg-brand-olive text-white shadow-sm";
+
+            // تطبيق ترجمة i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            // تحديث الحقول النائبة
+            document.getElementById('search-skill').placeholder = translations[lang]['search-placeholder-skill'];
+            document.getElementById('seeker-name').placeholder = translations[lang]['form-placeholder-name'];
+            document.getElementById('seeker-phone').placeholder = translations[lang]['form-placeholder-phone'];
+            document.getElementById('seeker-skills').placeholder = translations[lang]['form-placeholder-skills'];
+            document.getElementById('seeker-experience').placeholder = translations[lang]['form-placeholder-experience'];
+            
+            document.getElementById('learning-name').placeholder = translations[lang]['form-placeholder-name'];
+            document.getElementById('learning-phone').placeholder = translations[lang]['form-placeholder-phone'];
+            document.getElementById('learning-goal').placeholder = currentLang === 'ar' ? 'ماذا تأمل أن تحقق؟' : (currentLang === 'en' ? 'What do you hope to achieve?' : 'Qu\'espérez-vous accomplir?');
+            
+            document.getElementById('volunteer-name').placeholder = translations[lang]['form-placeholder-name'];
+            document.getElementById('volunteer-phone').placeholder = translations[lang]['form-placeholder-phone'];
+
+            document.getElementById('chat-input').placeholder = translations[lang]['chat-placeholder'];
+
+            populateDropdowns();
+            filterJobs();
+            renderStories();
+            updateTabButtonStyles();
+        }
+
+        // دالة التنقل بين تبويبات بوابات التسجيل الثلاثة
+        function switchTab(tab) {
+            activeTab = tab;
+            
+            // إخفاء جميع الألواح
+            document.getElementById('panel-seeker').classList.add('hidden');
+            document.getElementById('panel-learning').classList.add('hidden');
+            document.getElementById('panel-volunteer').classList.add('hidden');
+
+            // إظهار اللوح النشط
+            document.getElementById(`panel-${tab}`).classList.remove('hidden');
+
+            updateTabButtonStyles();
+        }
+
+        function updateTabButtonStyles() {
+            const tabs = ['seeker', 'learning', 'volunteer'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === activeTab) {
+                    btn.className = "px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition duration-200 bg-white text-brand-olive shadow flex items-center gap-2";
+                } else {
+                    btn.className = "px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition duration-200 hover:bg-white hover:text-brand-olive text-white flex items-center gap-2";
+                }
+            });
+        }
+
+        // دالة محاكاة الدخول الفوري عن طريق الحسابات المتعددة
+        function triggerSocialAuth(provider) {
+            const statusIndicator = document.getElementById('auth-status-indicator');
+            const authText = document.getElementById('auth-status-text');
+            const socialGroup = document.getElementById('social-auth-group');
+
+            // محاكاة الاتصال والتحميل البصري
+            authText.innerHTML = currentLang === 'ar' ? `جاري الاتصال بـ ${provider}...` : `Connecting to ${provider}...`;
+            statusIndicator.classList.remove('hidden');
+            socialGroup.classList.add('opacity-50', 'pointer-events-none');
+
+            setTimeout(() => {
+                simulatedAuthUser = provider;
+                authText.innerHTML = currentLang === 'ar' ? `متصل وموثق عبر ${provider}` : (currentLang === 'en' ? `Linked via ${provider}` : `Connecté via ${provider}`);
+                socialGroup.classList.add('hidden');
+                statusIndicator.classList.remove('hidden');
+
+                // ملء الحقول تلقائياً كدليل على النجاح والمزامنة
+                const suffix = provider === 'Google' ? '@gmail.com' : (provider === 'Facebook' ? '@facebook.com' : '');
+                const demoName = provider === 'Google' ? 'سعيد المغترب' : (provider === 'Facebook' ? 'ياسر كريم' : 'مستخدم مجهول');
+                
+                if (activeTab === 'seeker') {
+                    document.getElementById('seeker-name').value = demoName;
+                    document.getElementById('seeker-phone').value = provider === 'Phone' ? '+212600112233' : 'saeed' + suffix;
+                } else if (activeTab === 'learning') {
+                    document.getElementById('learning-name').value = demoName;
+                    document.getElementById('learning-phone').value = provider === 'Phone' ? '+212600112233' : 'saeed' + suffix;
+                } else if (activeTab === 'volunteer') {
+                    document.getElementById('volunteer-name').value = demoName;
+                    document.getElementById('volunteer-phone').value = provider === 'Phone' ? '+212600112233' : 'saeed' + suffix;
+                }
+
+                // عرض إشعار النجاح الصغير
+                openModal(
+                    currentLang === 'ar' ? "تم الربط والمزامنة بنجاح" : "Account Synced",
+                    currentLang === 'ar' ? `مرحباً بك! لقد تم توثيق هويتك بشكل آمن عبر <strong>${provider}</strong>. قمنا بتعبئة بعض البيانات التلقائية لتسريع تجربتك بالكامل.` : `Successfully logged in via ${provider}. We have auto-filled details to speed up your process.`
+                );
+            }, 1200);
+        }
+
+        // محاكاة تفاعلية لسحب وإفلات وتحميل السير الذاتية
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('resume-file');
+
+        // منع السلوك الافتراضي لعمليات السحب
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.add('border-brand-olive'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.remove('border-brand-olive'), false);
+        });
+
+        dropZone.addEventListener('drop', handleDrop, false);
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files.length) {
+                simulateFileUpload(files[0]);
+            }
+        }
+
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            if (files.length) {
+                simulateFileUpload(files[0]);
+            }
+        }
+
+        // دالة محاكاة رفع السيرة الذاتية وإظهار المؤشرات المتقدمة
+        function simulateFileUpload(file) {
+            const progressContainer = document.getElementById('upload-progress-container');
+            const dropContent = document.getElementById('drop-zone-content');
+            const filenameEl = document.getElementById('upload-filename');
+            const percentEl = document.getElementById('upload-percent');
+            const progressBar = document.getElementById('upload-bar');
+            const successBadge = document.getElementById('upload-success-badge');
+
+            filenameEl.innerText = file.name;
+            dropContent.classList.add('hidden');
+            progressContainer.classList.remove('hidden');
+            successBadge.classList.add('hidden');
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                percentEl.innerText = `${progress}%`;
+                progressBar.style.width = `${progress}%`;
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    successBadge.classList.remove('hidden');
+                }
+            }, 150);
+        }
+
+        // ملء القوائم المنسدلة
+        function populateDropdowns() {
+            const citySelect = document.getElementById('filter-city');
+            const typeSelect = document.getElementById('filter-type');
+            const seekerCity = document.getElementById('seeker-city');
+
+            const prevCityValue = citySelect.value;
+            const prevTypeValue = typeSelect.value;
+
+            citySelect.innerHTML = selectOptions.cities[currentLang].map(opt => 
+                `<option value="${opt.value}">${opt.label}</option>`
+            ).join('');
+
+            seekerCity.innerHTML = `<option value="">${currentLang === 'ar' ? 'اختر المدينة' : (currentLang === 'en' ? 'Select City' : 'Choisir la ville')}</option>` + 
+            selectOptions.cities[currentLang].filter(c => c.value !== "").map(opt => 
+                `<option value="${opt.value}">${opt.label}</option>`
+            ).join('');
+
+            typeSelect.innerHTML = selectOptions.types[currentLang].map(opt => 
+                `<option value="${opt.value}">${opt.label}</option>`
+            ).join('');
+
+            citySelect.value = prevCityValue;
+            typeSelect.value = prevTypeValue;
+        }
+
+        // عرض فرص العمل الحية
+        function renderJobs(jobsList) {
+            const container = document.getElementById('jobs-container');
+            const noResults = document.getElementById('no-jobs-message');
+            container.innerHTML = '';
+
+            if (jobsList.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            jobsList.forEach(job => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 flex flex-col justify-between";
+                
+                const translatedCity = selectOptions.cities[currentLang].find(c => c.value === job.city)?.label || job.city;
+                const translatedType = selectOptions.types[currentLang].find(t => t.value === job.type)?.label || job.type;
+
+                card.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-start">
+                            <span class="inline-block px-2.5 py-1 bg-brand-sky text-brand-olive text-xs font-bold rounded-lg">${translatedType}</span>
+                            <span class="text-xs text-brand-accent font-semibold flex items-center gap-1">
+                                <i data-lucide="map-pin" class="w-3.5 h-3.5 flex-shrink-0"></i>
+                                <span>${translatedCity}</span>
+                            </span>
+                        </div>
+                        <h4 class="text-lg font-bold text-brand-olive leading-snug">${job.title[currentLang]}</h4>
+                        <p class="text-xs font-semibold text-gray-400">${job.company[currentLang]}</p>
+                        <p class="text-gray-500 text-sm leading-relaxed">${job.description[currentLang]}</p>
+                        
+                        <div class="pt-3 border-t border-dashed border-gray-100 space-y-2 text-xs">
+                            <p class="text-gray-500"><strong>${translations[currentLang]['sub-additional']}</strong> ${job.support[currentLang]}</p>
+                            <p class="text-gray-700 font-bold"><strong>${translations[currentLang]['sub-salary']}</strong> ${job.salary[currentLang]}</p>
+                        </div>
+                    </div>
+                    <button onclick="applyForJob(${job.id}, '${job.title[currentLang].replace(/'/g, "\\'")}')" class="mt-6 w-full bg-brand-olive hover:bg-opacity-90 text-white font-semibold py-2 px-4 rounded-xl text-sm transition duration-150 flex items-center justify-center gap-2">
+                        <i data-lucide="handshake" class="w-4 h-4 flex-shrink-0"></i>
+                        <span>${translations[currentLang]['apply-btn']}</span>
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // فلترة الوظائف النشطة
+        function filterJobs() {
+            const skillQuery = document.getElementById('search-skill').value.trim().toLowerCase();
+            const cityQuery = document.getElementById('filter-city').value;
+            const typeQuery = document.getElementById('filter-type').value;
+
+            const filtered = mockJobs.filter(job => {
+                const matchesSkill = !skillQuery || 
+                                     job.title[currentLang].toLowerCase().includes(skillQuery) || 
+                                     job.skill.toLowerCase().includes(skillQuery) || 
+                                     job.description[currentLang].toLowerCase().includes(skillQuery);
+                const matchesCity = !cityQuery || job.city === cityQuery;
+                const matchesType = !typeQuery || job.type === typeQuery;
+
+                return matchesSkill && matchesCity && matchesType;
+            });
+
+            renderJobs(filtered);
+        }
+
+        // عرض قصص النجاح
+        function renderStories() {
+            const container = document.getElementById('stories-container');
+            container.innerHTML = '';
+
+            successStories.forEach(story => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition duration-300 flex flex-col justify-between";
+                
+                card.innerHTML = `
+                    <div class="p-6 space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-brand-sky text-brand-olive font-extrabold rounded-full flex items-center justify-center text-lg shadow-sm">
+                                ${story.avatar}
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-brand-olive text-base">${story.name[currentLang]}</h4>
+                                <span class="text-xs text-emerald-600 font-medium">${story.role[currentLang]}</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-500 text-sm leading-relaxed">"${story.desc[currentLang]}"</p>
+                    </div>
+                    <div class="bg-gray-50 px-6 py-3 text-xs text-gray-400 border-t border-gray-100">
+                        ${story.meta[currentLang]}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // التقديم السريع والتوجيه التلقائي للمستخدم
+        function applyForJob(jobId, jobTitle) {
+            const msgs = {
+                ar: `لقد اخترت تقديم مهاراتك لفرصة: <strong>"${jobTitle}"</strong>. يرجى إتمام عملية التسجيل السريعة في مركز التسجيل التشاركي بالأسفل لنطابق ملفك بالكامل مع صاحب العمل.`,
+                en: `You have selected: <strong>"${jobTitle}"</strong>. Please fill the corresponding form in the hub below so we can link you directly with maximum confidentiality.`,
+                fr: `Vous avez sélectionné: <strong>"${jobTitle}"</strong>. Veuillez remplir le formulaire d'enregistrement dans l'espace ci-dessous afin de vous mettre en relation.`
+            };
+            const titleMsg = {
+                ar: "طلب انضمام آمن وتضامني",
+                en: "Secure & Supportive Application",
+                fr: "Candidature Sûre & Solidaire"
+            };
+
+            openModal(titleMsg[currentLang], msgs[currentLang]);
+            switchTab('seeker');
+            document.getElementById('register-hub').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // معالجة إرسال النماذج بالتبويبات وتأكيدها بصرياً بناءً على المسار
+        function handleTabSubmit(event, type) {
+            event.preventDefault();
+            
+            let title = "";
+            let message = "";
+
+            if (type === 'seeker') {
+                const name = document.getElementById('seeker-name').value;
+                const city = document.getElementById('seeker-city').value;
+                const skills = document.getElementById('seeker-skills').value;
+                const authText = simulatedAuthUser ? ` (مؤهل عبر ${simulatedAuthUser})` : '';
+
+                title = currentLang === 'ar' ? "تم تسجيل مهاراتك وسيرتك بنجاح" : "Job Seeker Registered";
+                message = currentLang === 'ar' ? 
+                    `عزيزي الباحث <strong>${name}</strong>${authText}، لقد تم تسجيل مهاراتك بنجاح في مدينة <strong>${city}</strong> لربطك مع عروض العمل التضامنية بخصوصية وسرية تامة.` :
+                    `Dear seeker <strong>${name}</strong>, your skills profile for <strong>${city}</strong> has been secured in our direct matching queue with utmost confidentiality.`;
+                
+                document.getElementById('seeker-form').reset();
+                // إعادة تهيئة محاكي الملفات
+                document.getElementById('upload-progress-container').classList.add('hidden');
+                document.getElementById('drop-zone-content').classList.remove('hidden');
+
+            } else if (type === 'learning') {
+                const name = document.getElementById('learning-name').value;
+                const course = document.getElementById('learning-course').value;
+
+                title = currentLang === 'ar' ? "تم تسجيلك في الدورة التدريبية" : "Course Registration Success";
+                message = currentLang === 'ar' ?
+                    `عزيزي الطالب <strong>${name}</strong>، تم إدراج اسمك رسمياً في دورة <strong>"${course}"</strong> مجاناً. سيتم إخطارك بموعد بدء الحصص والمواد عبر تواصل آمن.` :
+                    `Dear student <strong>${name}</strong>, you are registered for <strong>"${course}"</strong>. Class schedules and material accesses will be safely dispatched shortly.`;
+                
+                document.getElementById('learning-form').reset();
+
+            } else if (type === 'volunteer') {
+                const name = document.getElementById('volunteer-name').value;
+                const role = document.getElementById('volunteer-role').value;
+
+                title = currentLang === 'ar' ? "فخورون بانضمامك كشريك داعم" : "Volunteer Registered";
+                message = currentLang === 'ar' ?
+                    `عزيزي المساند <strong>${name}</strong>، نشكر روحك التضامنية العالية! تم تسجيل اهتمامك للتطوع في مجال <strong>"${role}"</strong> لخدمة كرامة المهاجرين.` :
+                    `Dear supporter <strong>${name}</strong>, thank you for your humanitarian spirit. Your offer to volunteer in <strong>"${role}"</strong> has been gratefully welcomed.`;
+                
+                document.getElementById('volunteer-form').reset();
+            }
+
+            // إعادة تعيين محاكي التوثيق
+            simulatedAuthUser = null;
+            document.getElementById('auth-status-indicator').classList.add('hidden');
+            document.getElementById('social-auth-group').classList.remove('hidden', 'opacity-50', 'pointer-events-none');
+
+            openModal(title, message);
+        }
+
+        function openEmployerModal() {
+            const titles = {
+                ar: "كن شريكاً متضامناً",
+                en: "Become a Solidarity Partner",
+                fr: "Devenir un Partenaire Solidaire"
+            };
+            const msgs = {
+                ar: "يسعدنا جداً رغبتك في توفير فرص عمل عادلة! يرجى إعداد تفاصيل الوظيفة الشاغرة وشروطها، ثم إرسالها إلى لجاننا الإنسانية المعتمدة لدراستها والموافقة عليها لضمان بيئة عمل آمنة ومريحة ومكافحة الاستغلال.",
+                en: "We highly appreciate your will to provide fair work. Please prepare your vacancy details. Our humanitarian committee will audit them to guarantee a safe work environment against exploitation.",
+                fr: "Nous apprécierons grandement votre volonté d'offrir un travail équitable. Veuillez préparer les détails du poste. Notre comité étudiera les offres pour garantir un environnement sans exploitation."
+            };
+
+            openModal(titles[currentLang], msgs[currentLang]);
+        }
+
+        function openModal(title, message) {
+            const modal = document.getElementById('custom-modal');
+            const card = document.getElementById('modal-card');
+            
+            document.getElementById('modal-title').innerHTML = title;
+            document.getElementById('modal-message').innerHTML = message;
+            document.getElementById('modal-btn').innerText = translations[currentLang]['modal-success-btn'];
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.add('opacity-100');
+                card.classList.remove('scale-95');
+                card.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('custom-modal');
+            const card = document.getElementById('modal-card');
+            
+            modal.classList.remove('opacity-100');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        /* ----------------------------------------------------
+           أكواد جافا سكريبت الخاصة بمساعد الذكاء الاصطناعي (Gemini)
+           ---------------------------------------------------- */
+        
+        function toggleChat() {
+            const chatWin = document.getElementById('chat-window');
+            if (chatWin.classList.contains('hidden')) {
+                chatWin.classList.remove('hidden');
+            } else {
+                chatWin.classList.add('hidden');
+            }
+        }
+
+        function sendQuickQuery(chipKey) {
+            const queryText = translations[currentLang][chipKey];
+            if (queryText) {
+                appendChatMessage(queryText, 'user');
+                getAIResponse(queryText);
+            }
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const inputEl = document.getElementById('chat-input');
+            const userText = inputEl.value.trim();
+            if (!userText) return;
+
+            appendChatMessage(userText, 'user');
+            inputEl.value = '';
+
+            getAIResponse(userText);
+        }
+
+        function appendChatMessage(text, sender) {
+            const msgsContainer = document.getElementById('chat-messages');
+            const msgRow = document.createElement('div');
+            
+            if (sender === 'user') {
+                msgRow.className = "flex items-start justify-end gap-2 max-w-[85%] mr-auto";
+                msgRow.innerHTML = `
+                    <div class="bg-brand-olive text-white p-3 rounded-2xl rounded-tl-none shadow-sm text-xs leading-relaxed">
+                        <p>${escapeHTML(text)}</p>
+                    </div>
+                `;
+            } else {
+                msgRow.className = "flex items-start gap-2 max-w-[85%]";
+                msgRow.innerHTML = `
+                    <div class="w-7 h-7 rounded-lg bg-brand-sky text-brand-olive flex items-center justify-center flex-shrink-0 text-xs">
+                        <i data-lucide="bot" class="w-4 h-4"></i>
+                    </div>
+                    <div class="bg-white p-3 rounded-2xl rounded-tr-none shadow-sm text-xs leading-relaxed text-gray-700">
+                        <p>${text}</p>
+                    </div>
+                `;
+            }
+
+            msgsContainer.appendChild(msgRow);
+            msgsContainer.scrollTop = msgsContainer.scrollHeight;
+            lucide.createIcons();
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        async function getAIResponse(userQuery) {
+            const msgsContainer = document.getElementById('chat-messages');
+            const loaderRow = document.createElement('div');
+            loaderRow.id = 'chat-loader';
+            loaderRow.className = "flex items-start gap-2 max-w-[85%]";
+            loaderRow.innerHTML = `
+                <div class="w-7 h-7 rounded-lg bg-brand-sky text-brand-olive flex items-center justify-center flex-shrink-0 text-xs animate-bounce">
+                    <i data-lucide="bot" class="w-4 h-4"></i>
+                </div>
+                <div class="bg-white p-3 rounded-2xl rounded-tr-none shadow-sm text-xs text-gray-400 flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-ping"></span>
+                    <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-ping delay-75"></span>
+                    <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-ping delay-150"></span>
+                </div>
+            `;
+            msgsContainer.appendChild(loaderRow);
+            msgsContainer.scrollTop = msgsContainer.scrollHeight;
+            lucide.createIcons();
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            const systemInstructionText = `
+                You are the compassionate, supportive AI Guide for the "New Opportunity" platform (منصة فرصة جديدة).
+                - Tone: Warm, highly respectful, human-centric, promoting dignity, security, and hope.
+                - Core Mission: Help migrants (including undocumented/irregular ones) navigate unemployment, find free vocational training (like Edraak, Coursera), learn local languages (like Duolingo), and connect with legal aid/UNHCR resources safely.
+                - CRITICAL RULE (Privacy First): ALWAYS reassure the user that their interaction is completely anonymous, safe, and secure. Under no circumstances should they fear being reported.
+                - System/Platform Integration: Guide the user to look at the job seeker registration form on the page, browse the job listings with flexible work conditions, or use the listed organizations and language links.
+                - Language: Address the user in the language they write to you in (Arabic, English, or French). Keep your answers concise, practical, and constructive. Never encourage illegal acts, but provide full humanitarian guidance for status regularisation and finding dignified livelihoods.
+            `;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemInstructionText }] }
+            };
+
+            let retryDelays = [1000, 2000, 4000, 8000, 16000];
+            let success = false;
+            let aiText = '';
+
+            for (let attempt = 0; attempt < 5; attempt++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API error with status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    aiText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    
+                    if (aiText) {
+                        success = true;
+                        break;
+                    } else {
+                        throw new Error("Empty response from AI");
+                    }
+                } catch (error) {
+                    if (attempt < 4) {
+                        await new Promise(resolve => setTimeout(resolve, retryDelays[attempt]));
+                    }
+                }
+            }
+
+            const loader = document.getElementById('chat-loader');
+            if (loader) loader.remove();
+
+            if (success) {
+                const formattedText = aiText.replace(/\n/g, '<br>');
+                appendChatMessage(formattedText, 'bot');
+            } else {
+                appendChatMessage(translations[currentLang]['chat-error'], 'bot');
+            }
+        }
+
+        // تهيئة الصفحة عند التحميل الأول
+        window.onload = function() {
+            switchLanguage('ar');
+        }
+    </script>
+</body>
+</html>
+
+```
